@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Search, ExternalLink, TrendingUp, Building2, Users, Target } from "lucide-react";
 import { SearchBar } from "@/components/SearchBar";
 import { SearchCards } from "@/components/SearchCards";
-import { CompanyCard } from "@/components/CompanyCard";
+import { CompanyTable } from "@/components/CompanyTable";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CompanyFilters } from "@/components/CompanyFilters";
 import { CompanyDetailPanel } from "@/components/CompanyDetailPanel";
@@ -87,7 +87,7 @@ const Index = () => {
       </header>
 
       {/* Main search interface */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="space-y-8">
           {/* Search modes */}
           <div className="flex flex-wrap gap-2 justify-center">
@@ -166,15 +166,10 @@ const Index = () => {
                 <ExportTools companies={filteredCompanies} searchQuery={searchQuery} />
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredCompanies.map((company, index) => (
-                  <CompanyCard 
-                    key={`${company.name}-${index}`} 
-                    company={company}
-                    onClick={() => handleCompanyClick(company)}
-                  />
-                ))}
-              </div>
+              <CompanyTable 
+                companies={filteredCompanies}
+                onCompanyClick={handleCompanyClick}
+              />
             </div>
           )}
         </div>
