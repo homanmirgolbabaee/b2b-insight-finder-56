@@ -143,9 +143,7 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                 </div>
               </TableHead>
               <TableHead className="font-semibold text-neutral-900">Stage</TableHead>
-              <TableHead className="font-semibold text-neutral-900">Valuation</TableHead>
-              <TableHead className="font-semibold text-neutral-900">Lead Investor</TableHead>
-              <TableHead 
+              <TableHead
                 className="font-semibold text-neutral-900 cursor-pointer hover:bg-neutral-50"
                 onClick={() => handleSort('last_updated')}
               >
@@ -212,12 +210,6 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                       )}
                     </TableCell>
                     <TableCell>
-                      <span className="text-neutral-500 text-sm">Not available publicly</span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-neutral-500 text-sm">Not available publicly</span>
-                    </TableCell>
-                    <TableCell>
                       <div className="text-sm text-neutral-600">
                         {formatDate(company.last_updated)}
                       </div>
@@ -269,7 +261,7 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                   {/* Expanded row content */}
                   {isExpanded && (
                     <TableRow className={isEven ? 'bg-white' : 'bg-neutral-50/50'}>
-                      <TableCell colSpan={8} className="p-6">
+                      <TableCell colSpan={6} className="p-6">
                         <div className="space-y-4">
                           <div>
                             <h4 className="font-semibold text-neutral-900 mb-2">Description</h4>
