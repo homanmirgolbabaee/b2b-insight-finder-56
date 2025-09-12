@@ -24,28 +24,26 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
 
   if (heroMode) {
     return (
-      <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto">
+      <form onSubmit={handleSubmit} className="relative">
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-primary rounded-2xl opacity-10 blur-xl transition-premium group-focus-within:opacity-20" />
-          <div className="relative bg-gradient-glass backdrop-blur-premium rounded-2xl border border-neutral-200/60 shadow-premium hover:shadow-premium-hover transition-premium group-focus-within:border-brand-primary/30">
-            <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 text-neutral-400 group-focus-within:text-brand-primary h-6 w-6 transition-premium" />
+          <div className="relative bg-white rounded-xl border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-200 group-focus-within:border-neutral-400 group-focus-within:shadow-md">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400 group-focus-within:text-neutral-600 h-5 w-5 transition-colors duration-200" />
             <Input
               type="text"
-              placeholder='Search companies, founders, industries, or try examples below...'
+              placeholder='Search companies, founders, industries...'
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               disabled={isLoading}
-              className="pl-16 pr-32 h-16 text-lg bg-transparent border-0 rounded-2xl focus:ring-0 focus:outline-none placeholder:text-text-tertiary font-medium text-text-primary"
+              className="pl-12 pr-24 h-14 text-base bg-transparent border-0 rounded-xl focus:ring-0 focus:outline-none placeholder:text-neutral-500"
             />
             <Button
               type="submit"
               disabled={isLoading || !query.trim()}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 h-10 px-6 bg-gradient-primary text-white rounded-xl shadow-glow hover:shadow-premium-hover disabled:opacity-50 disabled:cursor-not-allowed transition-premium font-semibold"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 px-4 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium text-sm"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Searching...
+                  <div className="w-3 h-3 border border-neutral-400 border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : (
                 "Search"

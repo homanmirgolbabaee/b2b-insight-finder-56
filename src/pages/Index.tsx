@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Search, ExternalLink, TrendingUp, Building2, Users, Target } from "lucide-react";
 import { SearchBar } from "@/components/SearchBar";
 import { SearchCards } from "@/components/SearchCards";
-import { SearchExamples } from "@/components/SearchExamples";
 import { CompanyTable } from "@/components/CompanyTable";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CompanyFilters } from "@/components/CompanyFilters";
@@ -116,12 +115,12 @@ const Index = () => {
 
           {/* Search interface */}
           {!showCardMode ? (
-            <div className="space-y-8">
+            <div className="space-y-6">
               <div className="text-center space-y-2">
-                <h2 className="text-2xl font-semibold text-text-primary">
+                <h2 className="text-2xl font-semibold text-neutral-900">
                   What would you like to research?
                 </h2>
-                <p className="text-text-secondary">
+                <p className="text-neutral-600">
                   Search for companies, founders, or explore specific industries
                 </p>
               </div>
@@ -133,17 +132,14 @@ const Index = () => {
                 onToggleMode={() => {}}
                 heroMode={true}
               />
-              
-              {/* Search Examples */}
-              <SearchExamples onExampleClick={handleSearch} isLoading={isLoading} />
             </div>
           ) : (
             <div className="space-y-6">
               <div className="text-center space-y-2">
-                <h2 className="text-2xl font-semibold text-text-primary">
+                <h2 className="text-2xl font-semibold text-neutral-900">
                   Choose a research source
                 </h2>
-                <p className="text-text-secondary">
+                <p className="text-neutral-600">
                   Select from curated data sources for instant insights
                 </p>
               </div>

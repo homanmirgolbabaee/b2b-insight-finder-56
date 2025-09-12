@@ -20,8 +20,8 @@ export function LoadingSpinner() {
         
         {/* Loading text */}
         <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
-          <div className="text-text-secondary font-medium animate-pulse">
-            Analyzing companies...
+          <div className="text-neutral-600 font-medium animate-pulse">
+            Discovering opportunities...
           </div>
         </div>
       </div>
