@@ -9,9 +9,10 @@ interface SearchBarProps {
   isLoading: boolean;
   showCardMode: boolean;
   onToggleMode: (cardMode: boolean) => void;
+  heroMode?: boolean;
 }
 
-export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode }: SearchBarProps) {
+export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, heroMode = false }: SearchBarProps) {
   const [query, setQuery] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -20,6 +21,41 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode }: S
       onSearch(query.trim());
     }
   };
+
+  if (heroMode) {
+    return (
+      <form onSubmit={handleSubmit} className="relative">
+        <div className="relative group">
+          <div className="absolute inset-0 bg-brand-primary/5 rounded-2xl blur-lg transition-all duration-300 group-focus-within:bg-brand-primary/10" />
+          <div className="relative bg-white rounded-2xl border border-neutral-200 shadow-card hover:shadow-card-hover transition-all duration-300 group-focus-within:border-brand-primary/30 group-focus-within:shadow-premium">
+            <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 text-neutral-400 group-focus-within:text-brand-primary h-5 w-5 transition-colors duration-300" />
+            <Input
+              type="text"
+              placeholder='Search company, founder, or keyword — e.g. "YC AI infra"'
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              disabled={isLoading}
+              className="pl-14 pr-36 h-16 text-base bg-transparent border-0 rounded-2xl focus:ring-0 focus:outline-none placeholder:text-neutral-500"
+            />
+            <Button
+              type="submit"
+              disabled={isLoading || !query.trim()}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 h-10 px-6 bg-gradient-primary text-white rounded-lg shadow-glow hover:shadow-premium-hover hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-300 font-medium"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 bg-white/30 rounded-full animate-pulse" />
+                  Searching
+                </div>
+              ) : (
+                "Search"
+              )}
+            </Button>
+          </div>
+        </div>
+      </form>
+    );
+  }
 
   return (
       <div className="w-full max-w-5xl mx-auto">
