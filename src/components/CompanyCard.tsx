@@ -1,7 +1,6 @@
-import { ExternalLink, Linkedin, Globe, Newspaper, DollarSign, Users, MapPin, Calendar } from "lucide-react";
+import { ExternalLink, Linkedin, Globe, Newspaper } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
 interface Company {
   name: string;
@@ -41,85 +40,71 @@ export function CompanyCard({ company, onClick }: CompanyCardProps) {
     }
   };
 
-  const hasFunding = company.funding_amount && company.funding_amount.trim() !== "";
-  const hasStage = company.funding_stage && company.funding_stage.trim() !== "";
-
   return (
     <Card 
-      className="h-full bg-white border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-200 hover:border-primary/40 cursor-pointer group"
+      className="h-full bg-gradient-card backdrop-blur-premium border border-neutral-200/60 shadow-premium hover:shadow-premium-hover transition-premium hover:border-brand-primary/40 hover:-translate-y-2 cursor-pointer group overflow-hidden"
       onClick={handleCardClick}
-    >      
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg font-semibold text-foreground leading-tight group-hover:text-primary transition-colors line-clamp-2">
-            {company.name}
-          </CardTitle>
-          {(hasFunding || hasStage) && (
-            <div className="flex flex-col gap-1 items-end flex-shrink-0">
-              {hasFunding && (
-                <Badge variant="secondary" className="text-xs font-medium bg-green-100 text-green-800 border-green-200">
-                  <DollarSign className="w-3 h-3 mr-1" />
-                  {company.funding_amount}
-                </Badge>
-              )}
-              {hasStage && (
-                <Badge variant="outline" className="text-xs">
-                  {company.funding_stage}
-                </Badge>
-              )}
-            </div>
-          )}
-        </div>
+    >
+      <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 transition-premium" />
+      
+      <CardHeader className="pb-4 relative z-10">
+        <CardTitle className="text-xl font-bold text-neutral-900 leading-tight group-hover:text-brand-primary transition-premium">
+          {company.name}
+        </CardTitle>
       </CardHeader>
       
-      <CardContent className="space-y-4">
-        <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">
+      <CardContent className="space-y-5 relative z-10">
+        <p className="text-neutral-600 text-sm leading-relaxed line-clamp-3 font-medium">
           {company.description}
         </p>
         
-        {/* Key Metrics */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex items-center gap-2 text-sm">
-            <Users className="w-4 h-4 text-muted-foreground" />
-            <span className="text-muted-foreground">Team:</span>
-            <span className="font-medium text-foreground">
-              {company.team_size > 0 ? company.team_size : "N/A"}
-            </span>
+        {/* Company Details */}
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <span className="text-neutral-500 font-medium">Funding:</span>
+            <p className="text-neutral-800 font-semibold">
+              {company.funding_amount || "Not available publicly"}
+            </p>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Calendar className="w-4 h-4 text-muted-foreground" />
-            <span className="text-muted-foreground">Founded:</span>
-            <span className="font-medium text-foreground">
-              {company.founded || "N/A"}
-            </span>
+          <div>
+            <span className="text-neutral-500 font-medium">Stage:</span>
+            <p className="text-neutral-800 font-semibold">
+              {company.funding_stage || "Not available publicly"}
+            </p>
+          </div>
+          <div>
+            <span className="text-neutral-500 font-medium">Team Size:</span>
+            <p className="text-neutral-800 font-semibold">
+              {company.team_size > 0 ? company.team_size : "Not available publicly"}
+            </p>
+          </div>
+          <div>
+            <span className="text-neutral-500 font-medium">Founded:</span>
+            <p className="text-neutral-800 font-semibold">
+              {company.founded || "Not available publicly"}
+            </p>
           </div>
         </div>
-
+        
         {company.location && (
-          <div className="flex items-center gap-2 text-sm">
-            <MapPin className="w-4 h-4 text-muted-foreground" />
-            <span className="text-muted-foreground">Location:</span>
-            <span className="font-medium text-foreground">{company.location}</span>
+          <div className="flex items-center gap-2 text-sm text-neutral-600">
+            <span className="font-medium">Location:</span>
+            <span>{company.location}</span>
           </div>
         )}
         
-        {/* Funding News - Only show if it exists */}
         {company.funding_or_launch_news && (
-          <div className="bg-primary/5 border border-primary/10 rounded-lg p-3">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-xs font-medium text-primary uppercase tracking-wide">
-                Latest Update
-              </span>
-            </div>
-            <p className="text-sm text-foreground line-clamp-2 leading-relaxed">
+          <div className="bg-gradient-to-r from-brand-primary/10 via-brand-secondary/10 to-brand-accent/10 rounded-xl p-4 border-l-4 border-brand-primary shadow-inner">
+            <p className="text-xs text-brand-primary font-bold uppercase tracking-wider mb-2">
+              Latest Funding News
+            </p>
+            <p className="text-sm text-neutral-800 font-semibold line-clamp-2 leading-relaxed">
               {company.funding_or_launch_news}
             </p>
           </div>
         )}
         
-        {/* Action Buttons */}
-        <div className="flex gap-2 pt-2 border-t border-border">
+        <div className="flex flex-wrap gap-3 pt-4">
           <Button
             variant="outline"
             size="sm"
@@ -127,9 +112,9 @@ export function CompanyCard({ company, onClick }: CompanyCardProps) {
               e.stopPropagation();
               openLink(company.links.website);
             }}
-            className="flex items-center gap-2 flex-1 text-xs"
+            className="flex items-center gap-2 text-neutral-600 hover:text-brand-primary hover:border-brand-primary hover:bg-brand-primary/5 transition-premium font-medium"
           >
-            <Globe className="h-3 w-3" />
+            <Globe className="h-4 w-4" />
             Website
           </Button>
           
@@ -140,9 +125,9 @@ export function CompanyCard({ company, onClick }: CompanyCardProps) {
               e.stopPropagation();
               openLink(company.links.linkedin);
             }}
-            className="flex items-center gap-2 flex-1 text-xs"
+            className="flex items-center gap-2 text-neutral-600 hover:text-blue-600 hover:border-blue-600 hover:bg-blue-50 transition-premium font-medium"
           >
-            <Linkedin className="h-3 w-3" />
+            <Linkedin className="h-4 w-4" />
             LinkedIn
           </Button>
           
@@ -154,12 +139,18 @@ export function CompanyCard({ company, onClick }: CompanyCardProps) {
                 e.stopPropagation();
                 openLink(company.links.news!);
               }}
-              className="flex items-center gap-2 flex-1 text-xs"
+              className="flex items-center gap-2 text-neutral-600 hover:text-brand-success hover:border-brand-success hover:bg-brand-success/5 transition-premium font-medium"
             >
-              <Newspaper className="h-3 w-3" />
+              <Newspaper className="h-4 w-4" />
               News
             </Button>
           )}
+        </div>
+        
+        {/* Premium Click Hint */}
+        <div className="text-xs text-neutral-500 opacity-0 group-hover:opacity-100 transition-premium pt-3 border-t border-neutral-200/60 flex items-center justify-center gap-2 font-medium">
+          <div className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse" />
+          Click for detailed insights
         </div>
       </CardContent>
     </Card>
