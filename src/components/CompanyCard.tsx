@@ -6,6 +6,13 @@ interface Company {
   name: string;
   description: string;
   funding_or_launch_news: string;
+  funding_amount: string;
+  funding_stage: string;
+  revenue_range: string;
+  team_size: number;
+  founded: string;
+  location: string;
+  last_updated: string;
   links: {
     news?: string | null;
     linkedin: string;
@@ -50,6 +57,41 @@ export function CompanyCard({ company, onClick }: CompanyCardProps) {
         <p className="text-neutral-600 text-sm leading-relaxed line-clamp-3 font-medium">
           {company.description}
         </p>
+        
+        {/* Company Details */}
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <span className="text-neutral-500 font-medium">Funding:</span>
+            <p className="text-neutral-800 font-semibold">
+              {company.funding_amount || "Not available publicly"}
+            </p>
+          </div>
+          <div>
+            <span className="text-neutral-500 font-medium">Stage:</span>
+            <p className="text-neutral-800 font-semibold">
+              {company.funding_stage || "Not available publicly"}
+            </p>
+          </div>
+          <div>
+            <span className="text-neutral-500 font-medium">Team Size:</span>
+            <p className="text-neutral-800 font-semibold">
+              {company.team_size > 0 ? company.team_size : "Not available publicly"}
+            </p>
+          </div>
+          <div>
+            <span className="text-neutral-500 font-medium">Founded:</span>
+            <p className="text-neutral-800 font-semibold">
+              {company.founded || "Not available publicly"}
+            </p>
+          </div>
+        </div>
+        
+        {company.location && (
+          <div className="flex items-center gap-2 text-sm text-neutral-600">
+            <span className="font-medium">Location:</span>
+            <span>{company.location}</span>
+          </div>
+        )}
         
         {company.funding_or_launch_news && (
           <div className="bg-gradient-to-r from-brand-primary/10 via-brand-secondary/10 to-brand-accent/10 rounded-xl p-4 border-l-4 border-brand-primary shadow-inner">

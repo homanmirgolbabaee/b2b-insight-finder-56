@@ -8,6 +8,13 @@ interface Company {
   name: string;
   description: string;
   funding_or_launch_news: string;
+  funding_amount: string;
+  funding_stage: string;
+  revenue_range: string;
+  team_size: number;
+  founded: string;
+  location: string;
+  last_updated: string;
   links: {
     news?: string | null;
     linkedin: string;
@@ -37,11 +44,17 @@ export function CompanyDetailPanel({ company, onClose, similarCompanies = [] }: 
             <div className="flex items-center gap-4 text-sm text-text-secondary">
               <div className="flex items-center gap-1">
                 <Building2 className="h-4 w-4" />
-                <span>Company</span>
+                <span>{company.funding_stage || "Company"}</span>
               </div>
+              {company.location && (
+                <div className="flex items-center gap-1">
+                  <MapPin className="h-4 w-4" />
+                  <span>{company.location}</span>
+                </div>
+              )}
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                <span>Recently Updated</span>
+                <span>Founded {company.founded || "Not available publicly"}</span>
               </div>
             </div>
           </div>
@@ -62,6 +75,37 @@ export function CompanyDetailPanel({ company, onClose, similarCompanies = [] }: 
             <p className="text-text-secondary leading-relaxed">
               {company.description}
             </p>
+          </div>
+
+          {/* Company Metrics */}
+          <div>
+            <h3 className="text-lg font-semibold text-text-primary mb-3">Company Details</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="text-sm text-text-secondary">Funding Amount</div>
+                <div className="font-medium text-text-primary">
+                  {company.funding_amount || "Not available publicly"}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-sm text-text-secondary">Funding Stage</div>
+                <div className="font-medium text-text-primary">
+                  {company.funding_stage || "Not available publicly"}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-sm text-text-secondary">Team Size</div>
+                <div className="font-medium text-text-primary">
+                  {company.team_size > 0 ? `${company.team_size} employees` : "Not available publicly"}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-sm text-text-secondary">Revenue Range</div>
+                <div className="font-medium text-text-primary">
+                  {company.revenue_range || "Not available publicly"}
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Funding/Launch News */}
