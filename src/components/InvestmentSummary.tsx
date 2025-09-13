@@ -1,4 +1,5 @@
-import { TrendingUp, DollarSign, Building2 } from "lucide-react";
+import { TrendingUp, DollarSign, Building2, Download, Bookmark, Share2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Company {
   name: string;
@@ -70,36 +71,65 @@ export function InvestmentSummary({ companies }: InvestmentSummaryProps) {
   const { total, average, validCount } = calculateTotalFunding();
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-      <div className="flex items-center gap-6">
-        <div className="flex items-center gap-2">
-          <Building2 className="h-5 w-5 text-brand-primary" />
-          <span className="text-lg font-semibold text-neutral-900">
-            {companies.length} companies
-          </span>
+    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-6 bg-gradient-to-r from-neutral-50 to-white border border-neutral-200 rounded-xl shadow-card">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-brand-primary/10 rounded-lg">
+            <Building2 className="h-5 w-5 text-brand-primary" />
+          </div>
+          <div>
+            <span className="text-2xl font-bold text-neutral-900">
+              {companies.length}
+            </span>
+            <span className="text-sm text-neutral-600 ml-2">companies</span>
+          </div>
         </div>
         
         {validCount > 0 && (
           <>
-            <div className="hidden sm:block w-px h-6 bg-neutral-300"></div>
+            <div className="hidden sm:block w-px h-8 bg-neutral-300"></div>
             
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-brand-success" />
-              <span className="text-lg font-bold text-neutral-900">
-                {total} total funding
-              </span>
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-brand-success/10 rounded-lg">
+                <TrendingUp className="h-5 w-5 text-brand-success" />
+              </div>
+              <div>
+                <span className="text-2xl font-bold text-neutral-900">
+                  {total}
+                </span>
+                <span className="text-sm text-neutral-600 ml-2">total funding</span>
+              </div>
             </div>
             
-            <div className="hidden sm:block w-px h-6 bg-neutral-300"></div>
+            <div className="hidden sm:block w-px h-8 bg-neutral-300"></div>
             
-            <div className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-brand-accent" />
-              <span className="text-lg font-semibold text-neutral-700">
-                Avg: {average}
-              </span>
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-brand-accent/10 rounded-lg">
+                <DollarSign className="h-5 w-5 text-brand-accent" />
+              </div>
+              <div>
+                <span className="text-lg font-bold text-neutral-900">
+                  Avg: {average}
+                </span>
+              </div>
             </div>
           </>
         )}
+      </div>
+      
+      <div className="flex items-center gap-2">
+        <Button variant="outline" size="sm" className="h-9 bg-white border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400">
+          <Download className="h-4 w-4 mr-2" />
+          Export Data
+        </Button>
+        <Button variant="outline" size="sm" className="h-9 bg-white border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400">
+          <Bookmark className="h-4 w-4 mr-2" />
+          Save Search
+        </Button>
+        <Button variant="outline" size="sm" className="h-9 bg-white border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400">
+          <Share2 className="h-4 w-4 mr-2" />
+          Share Results
+        </Button>
       </div>
     </div>
   );

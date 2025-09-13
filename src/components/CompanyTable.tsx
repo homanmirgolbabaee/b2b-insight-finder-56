@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight, ExternalLink, Linkedin, Globe, Newspaper, ArrowUpDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronRight, ExternalLink, Linkedin, Globe, Newspaper, ArrowUpDown, ChevronUp, Star, Target, TrendingUp } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -94,6 +94,59 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
     return 'outline';
   };
 
+  const getFundingIndicator = (amount: string) => {
+    if (!amount || amount.trim() === '') return null;
+    const match = amount.match(/\$?([\d.]+)\s*(B|M|K)?/i);
+    if (!match) return null;
+    
+    const value = parseFloat(match[1]);
+    const unit = match[2]?.toUpperCase();
+    
+    if (unit === 'B' || (unit === 'M' && value >= 500)) {
+      return { color: 'text-green-600', size: 'large' };
+    } else if (unit === 'M' && value >= 100) {
+      return { color: 'text-blue-600', size: 'medium' };
+    } else if (unit === 'M' && value >= 10) {
+      return { color: 'text-purple-600', size: 'small' };
+    }
+    return { color: 'text-neutral-500', size: 'small' };
+  };
+
+  const getInvestmentScore = (company: Company) => {
+    let score = 0;
+    
+    // Funding amount scoring
+    const match = company.funding_amount?.match(/\$?([\d.]+)\s*(B|M|K)?/i);
+    if (match) {
+      const value = parseFloat(match[1]);
+      const unit = match[2]?.toUpperCase();
+      if (unit === 'B') score += 40;
+      else if (unit === 'M' && value >= 100) score += 30;
+      else if (unit === 'M' && value >= 50) score += 20;
+      else score += 10;
+    }
+    
+    // Stage scoring
+    const stage = company.funding_stage?.toLowerCase();
+    if (stage?.includes('series c')) score += 20;
+    else if (stage?.includes('series b')) score += 15;
+    else if (stage?.includes('series a')) score += 10;
+    else if (stage?.includes('seed')) score += 5;
+    
+    // Team size scoring
+    if (company.team_size > 500) score += 15;
+    else if (company.team_size > 100) score += 10;
+    else if (company.team_size > 50) score += 5;
+    
+    // Recent activity scoring (placeholder)
+    const currentYear = new Date().getFullYear();
+    const lastUpdatedYear = new Date(company.last_updated).getFullYear();
+    if (lastUpdatedYear === currentYear) score += 15;
+    else if (lastUpdatedYear === currentYear - 1) score += 5;
+    
+    return Math.min(score, 100);
+  };
+
   const handleSort = (key: keyof Company) => {
     let direction: 'asc' | 'desc' = 'asc';
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -165,6 +218,7 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                 </div>
               </TableHead>
               <TableHead className="font-semibold text-neutral-800 py-4">Stage</TableHead>
+              <TableHead className="font-semibold text-neutral-800 py-4">Score</TableHead>
               <TableHead
                 className="font-semibold text-neutral-800 cursor-pointer hover:bg-neutral-100/50 transition-colors py-4"
                 onClick={() => handleSort('last_updated')}
@@ -182,7 +236,7 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                   )}
                 </div>
               </TableHead>
-              <TableHead className="font-semibold text-neutral-800 py-4">Links</TableHead>
+              <TableHead className="font-semibold text-neutral-800 py-4">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -190,6 +244,8 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
               const isExpanded = expandedRows.has(company.name);
               const isEven = index % 2 === 0;
               const stage = formatStage(company.funding_stage);
+              const fundingIndicator = getFundingIndicator(company.funding_amount);
+              const investmentScore = getInvestmentScore(company);
               
               return (
                 <>
@@ -226,8 +282,21 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                       </div>
                     </TableCell>
                     <TableCell className="text-right py-5">
-                      <div className="text-xl font-bold text-neutral-900 tracking-tight">
-                        {formatFundingAmount(company.funding_amount)}
+                      <div className="flex items-center justify-end gap-2">
+                        {fundingIndicator && (
+                          <div className={`w-2 h-2 rounded-full ${
+                            fundingIndicator.color === 'text-green-600' ? 'bg-green-500' :
+                            fundingIndicator.color === 'text-blue-600' ? 'bg-blue-500' :
+                            fundingIndicator.color === 'text-purple-600' ? 'bg-purple-500' : 'bg-neutral-400'
+                          }`} />
+                        )}
+                        <div className={`font-bold tracking-tight ${
+                          fundingIndicator?.size === 'large' ? 'text-2xl text-green-700' :
+                          fundingIndicator?.size === 'medium' ? 'text-xl text-blue-700' :
+                          'text-lg text-neutral-900'
+                        }`}>
+                          {formatFundingAmount(company.funding_amount)}
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell className="py-5">
@@ -243,12 +312,38 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                       )}
                     </TableCell>
                     <TableCell className="py-5">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                          investmentScore >= 80 ? 'bg-green-100 text-green-700' :
+                          investmentScore >= 60 ? 'bg-blue-100 text-blue-700' :
+                          investmentScore >= 40 ? 'bg-purple-100 text-purple-700' :
+                          'bg-neutral-100 text-neutral-600'
+                        }`}>
+                          {investmentScore}
+                        </div>
+                        {investmentScore >= 70 && (
+                          <TrendingUp className="h-3 w-3 text-green-600" />
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-5">
                       <div className="text-sm text-neutral-600 font-medium">
                         {formatDate(company.last_updated)}
                       </div>
                     </TableCell>
                     <TableCell className="py-5">
-                      <div className="flex gap-1">
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                          className="h-7 px-2 text-xs font-medium bg-white border-neutral-300 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all"
+                        >
+                          <Star className="h-3 w-3 mr-1" />
+                          Save
+                        </Button>
                         <Button
                           variant="ghost"
                           size="sm"
@@ -256,10 +351,10 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                             e.stopPropagation();
                             openLink(company.links.website);
                           }}
-                          className="h-8 w-8 p-0 hover:bg-neutral-200/50 transition-colors"
+                          className="h-7 w-7 p-0 hover:bg-neutral-200/50 transition-colors"
                           title="Website"
                         >
-                          <Globe className="h-4 w-4 text-neutral-500 hover:text-neutral-700" />
+                          <Globe className="h-3 w-3 text-neutral-500 hover:text-neutral-700" />
                         </Button>
                         <Button
                           variant="ghost"
@@ -268,10 +363,10 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                             e.stopPropagation();
                             openLink(company.links.linkedin);
                           }}
-                          className="h-8 w-8 p-0 hover:bg-neutral-200/50 transition-colors"
+                          className="h-7 w-7 p-0 hover:bg-neutral-200/50 transition-colors"
                           title="LinkedIn"
                         >
-                          <Linkedin className="h-4 w-4 text-neutral-500 hover:text-blue-600" />
+                          <Linkedin className="h-3 w-3 text-neutral-500 hover:text-blue-600" />
                         </Button>
                         {company.links.news && (
                           <Button
@@ -281,10 +376,10 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                               e.stopPropagation();
                               openLink(company.links.news!);
                             }}
-                            className="h-8 w-8 p-0 hover:bg-neutral-200/50 transition-colors"
+                            className="h-7 w-7 p-0 hover:bg-neutral-200/50 transition-colors"
                             title="News"
                           >
-                            <Newspaper className="h-4 w-4 text-neutral-500 hover:text-green-600" />
+                            <Newspaper className="h-3 w-3 text-neutral-500 hover:text-green-600" />
                           </Button>
                         )}
                       </div>
@@ -294,7 +389,7 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                   {/* Expanded row content */}
                   {isExpanded && (
                     <TableRow className={`${isEven ? 'bg-white' : 'bg-[#fafbfc]'} border-b border-neutral-100/50`}>
-                      <TableCell colSpan={6} className="p-6 pt-0">
+                      <TableCell colSpan={7} className="p-6 pt-0">
                         <div className="space-y-4">
                           <div>
                             <h4 className="font-semibold text-neutral-900 mb-2">Description</h4>

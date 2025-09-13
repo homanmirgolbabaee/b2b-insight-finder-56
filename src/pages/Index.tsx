@@ -8,6 +8,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CompanyFilters } from "@/components/CompanyFilters";
 import { CompanyDetailPanel } from "@/components/CompanyDetailPanel";
 import { ExportTools } from "@/components/ExportTools";
+import { InvestmentFilters } from "@/components/InvestmentFilters";
 import { useCompanySearch } from "@/hooks/useCompanySearch";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -31,9 +32,10 @@ interface Company {
 }
 
 interface ActiveFilters {
-  industries: string[];
-  stages: string[];
-  geographies: string[];
+  fundingStages: string[];
+  fundingRanges: string[];
+  sectors: string[];
+  locations: string[];
 }
 
 const Index = () => {
@@ -41,9 +43,10 @@ const Index = () => {
   const [showCardMode, setShowCardMode] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
-    industries: [],
-    stages: [],
-    geographies: []
+    fundingStages: [],
+    fundingRanges: [],
+    sectors: [],
+    locations: []
   });
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -160,10 +163,12 @@ const Index = () => {
           
           {filteredCompanies.length > 0 && !isLoading && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <InvestmentSummary companies={filteredCompanies} />
-                <ExportTools companies={filteredCompanies} searchQuery={searchQuery} />
-              </div>
+              <InvestmentSummary companies={filteredCompanies} />
+              
+              <InvestmentFilters 
+                activeFilters={activeFilters}
+                onFiltersChange={setActiveFilters}
+              />
               
               <CompanyTable 
                 companies={filteredCompanies}
