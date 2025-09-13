@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight, ExternalLink, Linkedin, Globe, Newspaper, ArrowUpDown } from "lucide-react";
+import { ChevronDown, ChevronRight, ExternalLink, Linkedin, Globe, Newspaper, ArrowUpDown, ChevronUp } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -66,8 +66,14 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
   };
 
   const formatFundingAmount = (amount: string) => {
-    if (!amount || amount.trim() === '') return "Not available publicly";
+    if (!amount || amount.trim() === '') return "Not disclosed";
     return amount;
+  };
+
+  const extractCityFromLocation = (location: string) => {
+    if (!location || location.trim() === '') return "Not disclosed";
+    // Extract just the city part (before comma if present)
+    return location.split(',')[0].trim();
   };
 
   const formatStage = (stage: string) => {
@@ -119,40 +125,64 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
 
   return (
     <div className="w-full">
-      <div className="rounded-lg border border-neutral-200 bg-white shadow-sm">
+      <div className="rounded-lg border border-neutral-200 bg-white shadow-card">
         <Table>
-          <TableHeader className="sticky top-0 bg-white z-10">
-            <TableRow className="border-b border-neutral-200">
-              <TableHead className="w-12"></TableHead>
+          <TableHeader className="sticky top-0 bg-neutral-50/80 backdrop-blur-sm z-10 border-b border-neutral-200">
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="w-12 py-4"></TableHead>
               <TableHead 
-                className="font-semibold text-neutral-900 cursor-pointer hover:bg-neutral-50"
+                className="font-semibold text-neutral-800 cursor-pointer hover:bg-neutral-100/50 transition-colors py-4"
                 onClick={() => handleSort('name')}
               >
                 <div className="flex items-center gap-2">
-                  Company Name
-                  <ArrowUpDown className="h-4 w-4" />
+                  Company
+                  {sortConfig?.key === 'name' ? (
+                    sortConfig.direction === 'asc' ? (
+                      <ChevronUp className="h-4 w-4 text-brand-primary" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4 text-brand-primary" />
+                    )
+                  ) : (
+                    <ArrowUpDown className="h-4 w-4 text-neutral-400" />
+                  )}
                 </div>
               </TableHead>
               <TableHead 
-                className="font-semibold text-neutral-900 text-right cursor-pointer hover:bg-neutral-50"
+                className="font-semibold text-neutral-800 text-right cursor-pointer hover:bg-neutral-100/50 transition-colors py-4"
                 onClick={() => handleSort('funding_amount')}
               >
                 <div className="flex items-center justify-end gap-2">
-                  Funding Amount
-                  <ArrowUpDown className="h-4 w-4" />
+                  Funding
+                  {sortConfig?.key === 'funding_amount' ? (
+                    sortConfig.direction === 'asc' ? (
+                      <ChevronUp className="h-4 w-4 text-brand-primary" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4 text-brand-primary" />
+                    )
+                  ) : (
+                    <ArrowUpDown className="h-4 w-4 text-neutral-400" />
+                  )}
                 </div>
               </TableHead>
-              <TableHead className="font-semibold text-neutral-900">Stage</TableHead>
+              <TableHead className="font-semibold text-neutral-800 py-4">Stage</TableHead>
               <TableHead
-                className="font-semibold text-neutral-900 cursor-pointer hover:bg-neutral-50"
+                className="font-semibold text-neutral-800 cursor-pointer hover:bg-neutral-100/50 transition-colors py-4"
                 onClick={() => handleSort('last_updated')}
               >
                 <div className="flex items-center gap-2">
                   Date
-                  <ArrowUpDown className="h-4 w-4" />
+                  {sortConfig?.key === 'last_updated' ? (
+                    sortConfig.direction === 'asc' ? (
+                      <ChevronUp className="h-4 w-4 text-brand-primary" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4 text-brand-primary" />
+                    )
+                  ) : (
+                    <ArrowUpDown className="h-4 w-4 text-neutral-400" />
+                  )}
                 </div>
               </TableHead>
-              <TableHead className="font-semibold text-neutral-900">Actions</TableHead>
+              <TableHead className="font-semibold text-neutral-800 py-4">Links</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -166,11 +196,11 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                   <TableRow 
                     key={company.name}
                     className={`${
-                      isEven ? 'bg-white' : 'bg-neutral-50/50'
-                    } hover:bg-neutral-100/50 transition-colors cursor-pointer`}
+                      isEven ? 'bg-white' : 'bg-[#fafbfc]'
+                    } hover:bg-neutral-100/70 transition-all duration-200 cursor-pointer border-b border-neutral-100/50`}
                     onClick={() => onCompanyClick?.(company)}
                   >
-                    <TableCell>
+                    <TableCell className="py-5">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -178,43 +208,46 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                           e.stopPropagation();
                           toggleRowExpansion(company.name);
                         }}
-                        className="h-6 w-6 p-0"
+                        className="h-6 w-6 p-0 hover:bg-neutral-200/50"
                       >
                         {isExpanded ? (
-                          <ChevronDown className="h-4 w-4" />
+                          <ChevronDown className="h-4 w-4 text-neutral-600" />
                         ) : (
-                          <ChevronRight className="h-4 w-4" />
+                          <ChevronRight className="h-4 w-4 text-neutral-600" />
                         )}
                       </Button>
                     </TableCell>
-                    <TableCell>
-                      <div className="font-bold text-neutral-900 hover:text-brand-primary transition-colors">
+                    <TableCell className="py-5">
+                      <div className="font-semibold text-neutral-900 hover:text-brand-primary transition-colors text-[15px]">
                         {company.name}
                       </div>
-                      <div className="text-sm text-neutral-600 mt-1">
-                        {company.location || "Not available publicly"}
+                      <div className="text-sm text-neutral-500 mt-0.5 font-medium">
+                        {extractCityFromLocation(company.location)}
                       </div>
                     </TableCell>
-                    <TableCell className="text-right">
-                      <div className="text-lg font-semibold text-neutral-900">
+                    <TableCell className="text-right py-5">
+                      <div className="text-xl font-bold text-neutral-900 tracking-tight">
                         {formatFundingAmount(company.funding_amount)}
                       </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="py-5">
                       {stage ? (
-                        <Badge variant={getStageVariant(stage)} className="font-medium">
+                        <Badge 
+                          variant={getStageVariant(stage)} 
+                          className="font-medium text-xs px-2.5 py-1"
+                        >
                           {stage}
                         </Badge>
                       ) : (
-                        <span className="text-neutral-500 text-sm">Not available publicly</span>
+                        <span className="text-neutral-400 text-sm font-medium">Not disclosed</span>
                       )}
                     </TableCell>
-                    <TableCell>
-                      <div className="text-sm text-neutral-600">
+                    <TableCell className="py-5">
+                      <div className="text-sm text-neutral-600 font-medium">
                         {formatDate(company.last_updated)}
                       </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="py-5">
                       <div className="flex gap-1">
                         <Button
                           variant="ghost"
@@ -223,10 +256,10 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                             e.stopPropagation();
                             openLink(company.links.website);
                           }}
-                          className="h-8 w-8 p-0"
+                          className="h-8 w-8 p-0 hover:bg-neutral-200/50 transition-colors"
                           title="Website"
                         >
-                          <Globe className="h-4 w-4" />
+                          <Globe className="h-4 w-4 text-neutral-500 hover:text-neutral-700" />
                         </Button>
                         <Button
                           variant="ghost"
@@ -235,10 +268,10 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                             e.stopPropagation();
                             openLink(company.links.linkedin);
                           }}
-                          className="h-8 w-8 p-0"
+                          className="h-8 w-8 p-0 hover:bg-neutral-200/50 transition-colors"
                           title="LinkedIn"
                         >
-                          <Linkedin className="h-4 w-4" />
+                          <Linkedin className="h-4 w-4 text-neutral-500 hover:text-blue-600" />
                         </Button>
                         {company.links.news && (
                           <Button
@@ -248,10 +281,10 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                               e.stopPropagation();
                               openLink(company.links.news!);
                             }}
-                            className="h-8 w-8 p-0"
+                            className="h-8 w-8 p-0 hover:bg-neutral-200/50 transition-colors"
                             title="News"
                           >
-                            <Newspaper className="h-4 w-4" />
+                            <Newspaper className="h-4 w-4 text-neutral-500 hover:text-green-600" />
                           </Button>
                         )}
                       </div>
@@ -260,8 +293,8 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                   
                   {/* Expanded row content */}
                   {isExpanded && (
-                    <TableRow className={isEven ? 'bg-white' : 'bg-neutral-50/50'}>
-                      <TableCell colSpan={6} className="p-6">
+                    <TableRow className={`${isEven ? 'bg-white' : 'bg-[#fafbfc]'} border-b border-neutral-100/50`}>
+                      <TableCell colSpan={6} className="p-6 pt-0">
                         <div className="space-y-4">
                           <div>
                             <h4 className="font-semibold text-neutral-900 mb-2">Description</h4>

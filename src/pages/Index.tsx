@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Search, ExternalLink, TrendingUp, Building2, Users, Target } from "lucide-react";
+import { InvestmentSummary } from "@/components/InvestmentSummary";
 import { SearchBar } from "@/components/SearchBar";
 import { SearchCards } from "@/components/SearchCards";
 import { CompanyTable } from "@/components/CompanyTable";
@@ -160,9 +161,7 @@ const Index = () => {
           {filteredCompanies.length > 0 && !isLoading && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-neutral-900">
-                  {filteredCompanies.length} companies found
-                </h3>
+                <InvestmentSummary companies={filteredCompanies} />
                 <ExportTools companies={filteredCompanies} searchQuery={searchQuery} />
               </div>
               
