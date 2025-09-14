@@ -64,23 +64,24 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => setShowExamples(true)}
                 disabled={isLoading}
-                className="pl-12 pr-32 h-14 text-base bg-transparent border-0 rounded-xl focus:ring-0 focus:outline-none placeholder:text-neutral-500"
+                className="pl-12 pr-20 sm:pr-32 h-12 sm:h-14 text-sm sm:text-base bg-transparent border-0 rounded-xl focus:ring-0 focus:outline-none placeholder:text-neutral-500"
               />
               <Button
                 type="button"
                 onClick={() => setShowExamples(!showExamples)}
-                className="absolute right-16 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 bg-transparent hover:bg-neutral-100 text-neutral-500 hover:text-neutral-700 transition-colors"
+                className="absolute right-12 sm:right-16 top-1/2 transform -translate-y-1/2 h-6 w-6 sm:h-8 sm:w-8 p-0 bg-transparent hover:bg-neutral-100 text-neutral-500 hover:text-neutral-700 transition-colors"
               >
-                <ChevronDown className={`h-4 w-4 transition-transform ${showExamples ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-3 w-3 sm:h-4 sm:w-4 transition-transform ${showExamples ? 'rotate-180' : ''}`} />
               </Button>
               <Button
                 type="submit"
                 disabled={isLoading || !query.trim()}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 px-4 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium text-sm"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 sm:h-10 px-2 sm:px-4 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium text-xs sm:text-sm"
               >
                 {isLoading ? (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2">
                     <div className="w-3 h-3 border border-neutral-400 border-t-transparent rounded-full animate-spin" />
+                    <span className="hidden sm:inline">Searching...</span>
                   </div>
                 ) : (
                   "Search"

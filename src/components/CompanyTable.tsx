@@ -151,7 +151,259 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
 
   return (
     <div className="w-full">
-      <div className="rounded-lg border border-neutral-200 bg-white shadow-card">
+      {/* Mobile view */}
+      <div className="md:hidden space-y-4">
+        {sortedCompanies.map((company, index) => {
+          const isExpanded = expandedRows.has(company.name);
+          const stage = formatStage(company.funding_stage);
+          const fundingIndicator = getFundingIndicator(company.funding_amount);
+          
+          return (
+            <div 
+              key={company.name} 
+              className="bg-white rounded-lg border border-neutral-200 shadow-card p-4 space-y-4"
+            >
+              {/* Company header */}
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="w-10 h-10 rounded-lg border border-neutral-200 flex items-center justify-center bg-white overflow-hidden flex-shrink-0">
+                    {company.logo ? (
+                      <img 
+                        src={company.logo} 
+                        alt={`${company.name} logo`}
+                        className="w-8 h-8 object-contain"
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          target.style.display = 'none';
+                          const fallback = target.nextElementSibling as HTMLElement;
+                          if (fallback) {
+                            fallback.style.display = 'flex';
+                          }
+                        }}
+                      />
+                    ) : null}
+                    <div 
+                      className={`w-8 h-8 rounded bg-brand-primary/10 flex items-center justify-center ${company.logo ? 'hidden' : 'flex'}`}
+                    >
+                      <span className="text-xs font-bold text-brand-primary">
+                        {company.name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-neutral-900 hover:text-brand-primary transition-colors text-sm sm:text-base truncate">
+                      {company.name}
+                    </div>
+                    <div className="text-xs sm:text-sm text-neutral-500 mt-0.5 font-medium">
+                      {extractCityFromLocation(company.location)}
+                    </div>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleRowExpansion(company.name);
+                  }}
+                  className="h-8 w-8 p-0 hover:bg-neutral-200/50 flex-shrink-0"
+                >
+                  {isExpanded ? (
+                    <ChevronDown className="h-4 w-4 text-neutral-600" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4 text-neutral-600" />
+                  )}
+                </Button>
+              </div>
+
+              {/* Funding info */}
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    {fundingIndicator && (
+                      <div className={`w-2 h-2 rounded-full ${
+                        fundingIndicator.color === 'text-green-600' ? 'bg-green-500' :
+                        fundingIndicator.color === 'text-blue-600' ? 'bg-blue-500' :
+                        fundingIndicator.color === 'text-purple-600' ? 'bg-purple-500' : 'bg-neutral-400'
+                      }`} />
+                    )}
+                    <div className={`font-bold tracking-tight ${
+                      fundingIndicator?.size === 'large' ? 'text-lg text-green-700' :
+                      fundingIndicator?.size === 'medium' ? 'text-base text-blue-700' :
+                      'text-sm text-neutral-900'
+                    }`}>
+                      {formatFundingAmount(company.funding_amount)}
+                    </div>
+                  </div>
+                  {stage ? (
+                    <Badge 
+                      variant={getStageVariant(stage)} 
+                      className="font-medium text-xs px-2 py-0.5"
+                    >
+                      {stage}
+                    </Badge>
+                  ) : (
+                    <span className="text-neutral-400 text-xs font-medium">Not disclosed</span>
+                  )}
+                </div>
+                <div className="text-xs text-neutral-600 font-medium text-right">
+                  {formatDate(company.last_updated)}
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex flex-wrap items-center gap-2 pt-2">
+                <Button
+                  variant={dashboardStore.isCompanySaved(company.name) ? "default" : "outline"}
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (dashboardStore.isCompanySaved(company.name)) {
+                      dashboardStore.unsaveCompany(company.name);
+                    } else {
+                      dashboardStore.saveCompany(
+                        company.name, 
+                        company.funding_stage || "Not disclosed", 
+                        company.funding_amount || "Not disclosed"
+                      );
+                    }
+                  }}
+                  className={`h-8 px-3 text-xs font-medium transition-all ${
+                    dashboardStore.isCompanySaved(company.name)
+                      ? "bg-brand-primary text-white border-brand-primary hover:bg-brand-primary/90"
+                      : "bg-white border-neutral-300 hover:bg-brand-primary hover:text-white hover:border-brand-primary"
+                  }`}
+                >
+                  <Heart className={`h-3 w-3 mr-1 ${dashboardStore.isCompanySaved(company.name) ? "fill-current" : ""}`} />
+                  {dashboardStore.isCompanySaved(company.name) ? "Saved" : "Save"}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedCompanyForReport(company.name);
+                    setReportDialogOpen(true);
+                  }}
+                  className="h-8 w-8 p-0 hover:bg-neutral-200/50 transition-colors"
+                  title="Generate Report"
+                >
+                  <FileText className="h-3 w-3 text-neutral-500 hover:text-purple-600" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openLink(company.links.website);
+                  }}
+                  className="h-8 w-8 p-0 hover:bg-neutral-200/50 transition-colors"
+                  title="Website"
+                >
+                  <Globe className="h-3 w-3 text-neutral-500 hover:text-neutral-700" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openLink(company.links.linkedin);
+                  }}
+                  className="h-8 w-8 p-0 hover:bg-neutral-200/50 transition-colors"
+                  title="LinkedIn"
+                >
+                  <Linkedin className="h-3 w-3 text-neutral-500 hover:text-blue-600" />
+                </Button>
+                {company.links.news && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openLink(company.links.news!);
+                    }}
+                    className="h-8 w-8 p-0 hover:bg-neutral-200/50 transition-colors"
+                    title="News"
+                  >
+                    <Newspaper className="h-3 w-3 text-neutral-500 hover:text-green-600" />
+                  </Button>
+                )}
+              </div>
+
+              {/* Expanded content */}
+              {isExpanded && (
+                <div className="pt-4 border-t border-neutral-100">
+                  <div className="space-y-3">
+                    <div>
+                      <h4 className="font-semibold text-neutral-900 text-sm mb-2">Company Description</h4>
+                      <p className="text-sm text-neutral-700 leading-relaxed">
+                        {company.description}
+                      </p>
+                    </div>
+                    
+                    {company.funding_or_launch_news && (
+                      <div>
+                        <h4 className="font-semibold text-neutral-900 text-sm mb-2">Recent News</h4>
+                        <p className="text-sm text-neutral-700 leading-relaxed">
+                          {company.funding_or_launch_news}
+                        </p>
+                      </div>
+                    )}
+                    
+                    <div className="grid grid-cols-2 gap-4 pt-2">
+                      <div>
+                        <span className="font-medium text-neutral-800 text-xs">Valuation</span>
+                        <p className="text-sm text-neutral-600 mt-1">
+                          {company.valuation || "Not disclosed"}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="font-medium text-neutral-800 text-xs">Revenue</span>
+                        <p className="text-sm text-neutral-600 mt-1">
+                          {company.revenue_range || "Not disclosed"}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="font-medium text-neutral-800 text-xs">Team Size</span>
+                        <p className="text-sm text-neutral-600 mt-1">
+                          {company.team_size ? `${company.team_size} employees` : "Not disclosed"}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="font-medium text-neutral-800 text-xs">Founded</span>
+                        <p className="text-sm text-neutral-600 mt-1">
+                          {company.founded || "Not disclosed"}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {company.investors && company.investors.length > 0 && (
+                      <div>
+                        <span className="font-medium text-neutral-800 text-xs">Investors</span>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {company.investors.slice(0, 3).map((investor, i) => (
+                            <Badge key={i} variant="outline" className="text-xs px-2 py-0.5">
+                              {investor}
+                            </Badge>
+                          ))}
+                          {company.investors.length > 3 && (
+                            <Badge variant="outline" className="text-xs px-2 py-0.5">
+                              +{company.investors.length - 3} more
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop view */}
+      <div className="hidden md:block rounded-lg border border-neutral-200 bg-white shadow-card">
         <Table>
           <TableHeader className="sticky top-0 bg-neutral-50/80 backdrop-blur-sm z-10 border-b border-neutral-200">
             <TableRow className="hover:bg-transparent">

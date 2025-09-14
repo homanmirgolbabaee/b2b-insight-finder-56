@@ -81,34 +81,34 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-hero">
       {/* Professional header with user navigation */}
       <header className="border-b border-neutral-300/40 bg-surface/98 backdrop-blur-md sticky top-0 z-50">
-        <div className="container-max section-padding py-5">
+        <div className="container-max section-padding py-3 sm:py-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-9 h-9 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow">
-                <Building2 className="h-5 w-5 text-white" />
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow flex-shrink-0">
+                <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
               </div>
-              <div>
-                <h1 className="text-xl font-bold text-text-primary tracking-tight">Investment Research Platform</h1>
-                <p className="text-sm text-text-secondary font-medium">Professional startup intelligence</p>
+              <div className="min-w-0">
+                <h1 className="text-base sm:text-lg lg:text-xl font-bold text-text-primary tracking-tight truncate">Investment Research Platform</h1>
+                <p className="text-xs sm:text-sm text-text-secondary font-medium hidden sm:block">Professional startup intelligence</p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowDashboard(true)}
-                className="text-text-secondary hover:text-text-primary hover:bg-neutral-100/80 font-medium"
+                className="text-text-secondary hover:text-text-primary hover:bg-neutral-100/80 font-medium text-xs sm:text-sm px-2 sm:px-3"
               >
-                <User className="h-4 w-4 mr-2" />
-                Dashboard
+                <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Dashboard</span>
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-text-secondary hover:text-text-primary hover:bg-neutral-100/80 font-medium"
+                className="text-text-secondary hover:text-text-primary hover:bg-neutral-100/80 font-medium text-xs sm:text-sm px-2 sm:px-3"
               >
-                <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
+                <LogOut className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Sign Out</span>
               </Button>
             </div>
           </div>
@@ -116,15 +116,15 @@ const Index = () => {
       </header>
 
       {/* Main search interface */}
-      <div className="container-max section-padding py-16">
-        <div className="space-y-10">
+      <div className="container-max section-padding py-8 sm:py-12 lg:py-16">
+        <div className="space-y-6 sm:space-y-8 lg:space-y-10">
           {/* Professional search modes */}
           <div className="flex justify-center fade-in">
-            <div className="bg-surface/90 backdrop-blur-sm rounded-xl p-1.5 shadow-premium border border-neutral-300/50">
-              <div className="flex gap-1">
+            <div className="bg-surface/90 backdrop-blur-sm rounded-xl p-1 sm:p-1.5 shadow-premium border border-neutral-300/50">
+              <div className="flex gap-0.5 sm:gap-1">
                 <button
                   onClick={() => setShowCardMode(false)}
-                  className={`px-8 py-3 text-sm font-semibold rounded-lg transition-all duration-300 ${
+                  className={`px-4 sm:px-6 lg:px-8 py-2 sm:py-3 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-300 ${
                     !showCardMode 
                       ? 'bg-gradient-primary text-white shadow-glow' 
                       : 'text-text-secondary hover:text-text-primary hover:bg-neutral-100/60'
@@ -134,7 +134,7 @@ const Index = () => {
                 </button>
                 <button
                   onClick={() => setShowCardMode(true)}
-                  className={`px-8 py-3 text-sm font-semibold rounded-lg transition-all duration-300 ${
+                  className={`px-4 sm:px-6 lg:px-8 py-2 sm:py-3 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-300 ${
                     showCardMode 
                       ? 'bg-gradient-primary text-white shadow-glow' 
                       : 'text-text-secondary hover:text-text-primary hover:bg-neutral-100/60'
@@ -148,13 +148,13 @@ const Index = () => {
 
           {/* Professional search interface */}
           {!showCardMode ? (
-            <Card className="max-w-4xl mx-auto p-10 bg-gradient-card shadow-premium hover-lift border-0">
-              <div className="space-y-8">
-                <div className="text-center space-y-4">
-                  <h2 className="text-3xl font-bold text-text-primary tracking-tight">
+            <Card className="max-w-4xl mx-auto p-6 sm:p-8 lg:p-10 bg-gradient-card shadow-premium hover-lift border-0">
+              <div className="space-y-6 sm:space-y-8">
+                <div className="text-center space-y-3 sm:space-y-4">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-text-primary tracking-tight">
                     Advanced Investment Research
                   </h2>
-                  <p className="text-lg text-text-secondary font-medium max-w-2xl mx-auto">
+                  <p className="text-sm sm:text-base lg:text-lg text-text-secondary font-medium max-w-2xl mx-auto px-4">
                     Search for companies, funding rounds, or explore specific market segments with AI-powered insights
                   </p>
                 </div>
@@ -169,13 +169,13 @@ const Index = () => {
               </div>
             </Card>
           ) : (
-            <Card className="max-w-6xl mx-auto p-10 bg-gradient-card shadow-premium hover-lift border-0">
-              <div className="space-y-8">
-                <div className="text-center space-y-4">
-                  <h2 className="text-3xl font-bold text-text-primary tracking-tight">
+            <Card className="max-w-6xl mx-auto p-6 sm:p-8 lg:p-10 bg-gradient-card shadow-premium hover-lift border-0">
+              <div className="space-y-6 sm:space-y-8">
+                <div className="text-center space-y-3 sm:space-y-4">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-text-primary tracking-tight">
                     Quick Research Templates
                   </h2>
-                  <p className="text-lg text-text-secondary font-medium max-w-2xl mx-auto">
+                  <p className="text-sm sm:text-base lg:text-lg text-text-secondary font-medium max-w-2xl mx-auto px-4">
                     Select from curated research templates for instant market intelligence
                   </p>
                 </div>
@@ -197,14 +197,14 @@ const Index = () => {
           )}
           
           {filteredCompanies.length > 0 && !isLoading && (
-            <div className="space-y-8 fade-in">
-              <Card className="p-8 bg-gradient-card shadow-premium hover-lift border-0">
+            <div className="space-y-6 sm:space-y-8 fade-in">
+              <Card className="p-4 sm:p-6 lg:p-8 bg-gradient-card shadow-premium hover-lift border-0">
                 <InvestmentSummary companies={filteredCompanies} />
               </Card>
               
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <div className="lg:col-span-1">
-                  <Card className="p-7 bg-gradient-card shadow-card hover-lift border-0">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+                <div className="lg:col-span-1 order-2 lg:order-1">
+                  <Card className="p-4 sm:p-6 lg:p-7 bg-gradient-card shadow-card hover-lift border-0">
                     <InvestmentFilters 
                       activeFilters={activeFilters}
                       onFiltersChange={setActiveFilters}
@@ -212,8 +212,8 @@ const Index = () => {
                   </Card>
                 </div>
                 
-                <div className="lg:col-span-3">
-                  <Card className="bg-gradient-card shadow-premium hover-lift border-0">
+                <div className="lg:col-span-3 order-1 lg:order-2">
+                  <Card className="bg-gradient-card shadow-premium hover-lift border-0 overflow-hidden">
                     <CompanyTable 
                       companies={filteredCompanies}
                       onCompanyClick={handleCompanyClick}
