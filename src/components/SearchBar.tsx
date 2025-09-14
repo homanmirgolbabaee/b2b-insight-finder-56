@@ -69,12 +69,12 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
               
               <Input
                 type="text"
-                placeholder='Search companies, founders, industries...'
+                placeholder="Search companies, founders, industries..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => setShowExamples(true)}
                 disabled={isLoading}
-                className="pl-12 pr-20 sm:pr-32 h-12 sm:h-14 text-sm sm:text-base bg-transparent border-0 rounded-xl focus:ring-0 focus:outline-none placeholder:text-neutral-500"
+                className="pl-12 pr-20 sm:pr-32 h-12 sm:h-14 text-sm sm:text-base bg-white border-0 rounded-xl focus:ring-0 focus:outline-none placeholder:text-neutral-500"
               />
               <Button
                 type="button"
@@ -103,19 +103,19 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
         
         {/* Examples Dropdown */}
         {showExamples && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-neutral-200 shadow-lg z-50 max-h-80 overflow-y-auto">
-            <div className="p-3 border-b border-neutral-100 bg-neutral-50 rounded-t-xl">
+          <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-neutral-200 shadow-lg z-[999] max-h-80 overflow-y-auto backdrop-blur-sm">
+            <div className="p-3 border-b border-neutral-100 bg-neutral-50/95 rounded-t-xl backdrop-blur-sm">
               <div className="flex items-center gap-2">
                 <Lightbulb className="h-4 w-4 text-amber-500" />
                 <span className="text-sm font-medium text-neutral-700">Search Examples</span>
               </div>
             </div>
-            <div className="py-2">
+            <div className="py-2 bg-white/95 backdrop-blur-sm">
               {searchExamples.map((example, index) => (
                 <button
                   key={index}
                   onClick={() => handleExampleClick(example)}
-                  className="w-full text-left px-4 py-3 hover:bg-neutral-50 transition-colors text-sm text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0"
+                  className="w-full text-left px-4 py-3 hover:bg-neutral-50/80 transition-colors text-sm text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0"
                 >
                   {example}
                 </button>
@@ -194,19 +194,19 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
             
             {/* Examples Dropdown */}
             {showExamples && (
-              <div className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl border border-neutral-200/60 shadow-premium z-50 max-h-80 overflow-y-auto backdrop-blur-premium">
-                <div className="p-4 border-b border-neutral-100 bg-gradient-subtle rounded-t-2xl">
+              <div className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl border border-neutral-200/60 shadow-premium z-[999] max-h-80 overflow-y-auto backdrop-blur-sm">
+                <div className="p-4 border-b border-neutral-100 bg-neutral-50/95 rounded-t-2xl backdrop-blur-sm">
                   <div className="flex items-center gap-2">
                     <Lightbulb className="h-5 w-5 text-amber-500" />
                     <span className="text-base font-semibold text-neutral-800">Search Examples</span>
                   </div>
                 </div>
-                <div className="py-2">
+                <div className="py-2 bg-white/95 backdrop-blur-sm">
                   {searchExamples.map((example, index) => (
                     <button
                       key={index}
                       onClick={() => handleExampleClick(example)}
-                      className="w-full text-left px-6 py-4 hover:bg-gradient-subtle transition-all text-base text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0 font-medium"
+                      className="w-full text-left px-6 py-4 hover:bg-neutral-50/80 transition-all text-base text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0 font-medium"
                     >
                       {example}
                     </button>
