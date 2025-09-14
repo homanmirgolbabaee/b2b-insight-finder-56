@@ -182,6 +182,6 @@ All colors MUST be HSL.
   }
   
   .fade-in {
-    @apply animate-in fade-in duration-500;
+    @apply animate-in duration-500;
   }
 }
