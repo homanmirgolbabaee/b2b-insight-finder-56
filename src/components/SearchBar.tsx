@@ -213,78 +213,77 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
         </div>
         
         {!showCardMode && (
-          <>
+          <div className="relative" ref={dropdownRef}>
+            <form onSubmit={handleSubmit} className="relative">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-primary rounded-3xl opacity-20 blur-xl transition-premium group-focus-within:opacity-30" />
+                <div className="relative bg-gradient-glass backdrop-blur-premium rounded-3xl border border-neutral-200/60 shadow-premium hover:shadow-premium-hover transition-premium">
+                  <Search className="absolute left-8 top-1/2 transform -translate-y-1/2 text-neutral-400 group-focus-within:text-brand-primary h-6 w-6 transition-premium" />
+                  <Input
+                    type="text"
+                    placeholder="Search AI startups, fintech, competitors, or any industry..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onFocus={() => setShowExamples(true)}
+                    disabled={isLoading}
+                    className="pl-20 pr-52 h-20 text-lg bg-transparent border-0 rounded-3xl focus:ring-0 focus:outline-none placeholder:text-neutral-500 font-medium"
+                  />
+                  <Button
+                    type="button"
+                    onClick={() => setShowExamples(!showExamples)}
+                    className="absolute right-44 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 bg-white/10 hover:bg-white/20 text-neutral-600 hover:text-brand-primary rounded-xl transition-all"
+                  >
+                    <ChevronDown className={`h-5 w-5 transition-transform ${showExamples ? 'rotate-180' : ''}`} />
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isLoading || !query.trim()}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 h-12 px-8 bg-gradient-primary text-white rounded-2xl shadow-glow hover:shadow-premium-hover disabled:opacity-50 disabled:cursor-not-allowed transition-premium font-semibold"
+                  >
+                    {isLoading ? (
+                      <div className="flex items-center gap-3">
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Searching...
+                      </div>
+                    ) : (
+                      "Search Now"
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </form>
+            
+            {/* Examples Dropdown */}
+            {showExamples && (
+              <div className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl border border-neutral-200/60 shadow-premium z-[999] max-h-80 overflow-y-auto backdrop-blur-sm">
+                <div className="p-4 border-b border-neutral-100 bg-neutral-50/95 rounded-t-2xl backdrop-blur-sm">
+                  <div className="flex items-center gap-2">
+                    <Lightbulb className="h-5 w-5 text-amber-500" />
+                    <span className="text-base font-semibold text-neutral-800">Search Examples</span>
+                  </div>
+                </div>
+                <div className="py-2 bg-white/95 backdrop-blur-sm">
+                  {searchExamples.map((example, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleExampleClick(example)}
+                      className="w-full text-left px-6 py-4 hover:bg-neutral-50/80 transition-all text-base text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0 font-medium"
+                    >
+                      {example}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Filter Bubbles - positioned below search bar */}
             <FilterBubbles 
               onFilterSelect={handleFilterSelect}
               selectedFilters={selectedFilters}
               onFilterRemove={handleFilterRemove}
               onClearAll={handleClearAllFilters}
             />
-            
-            <div className="relative" ref={dropdownRef}>
-              <form onSubmit={handleSubmit} className="relative">
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-primary rounded-3xl opacity-20 blur-xl transition-premium group-focus-within:opacity-30" />
-                  <div className="relative bg-gradient-glass backdrop-blur-premium rounded-3xl border border-neutral-200/60 shadow-premium hover:shadow-premium-hover transition-premium">
-                    <Search className="absolute left-8 top-1/2 transform -translate-y-1/2 text-neutral-400 group-focus-within:text-brand-primary h-6 w-6 transition-premium" />
-                    <Input
-                      type="text"
-                      placeholder="Search AI startups, fintech, competitors, or any industry..."
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      onFocus={() => setShowExamples(true)}
-                      disabled={isLoading}
-                      className="pl-20 pr-52 h-20 text-lg bg-transparent border-0 rounded-3xl focus:ring-0 focus:outline-none placeholder:text-neutral-500 font-medium"
-                    />
-                    <Button
-                      type="button"
-                      onClick={() => setShowExamples(!showExamples)}
-                      className="absolute right-44 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 bg-white/10 hover:bg-white/20 text-neutral-600 hover:text-brand-primary rounded-xl transition-all"
-                    >
-                      <ChevronDown className={`h-5 w-5 transition-transform ${showExamples ? 'rotate-180' : ''}`} />
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={isLoading || !query.trim()}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 h-12 px-8 bg-gradient-primary text-white rounded-2xl shadow-glow hover:shadow-premium-hover disabled:opacity-50 disabled:cursor-not-allowed transition-premium font-semibold"
-                    >
-                      {isLoading ? (
-                        <div className="flex items-center gap-3">
-                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          Searching...
-                        </div>
-                      ) : (
-                        "Search Now"
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              </form>
-              
-              {/* Examples Dropdown */}
-              {showExamples && (
-                <div className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl border border-neutral-200/60 shadow-premium z-[999] max-h-80 overflow-y-auto backdrop-blur-sm">
-                  <div className="p-4 border-b border-neutral-100 bg-neutral-50/95 rounded-t-2xl backdrop-blur-sm">
-                    <div className="flex items-center gap-2">
-                      <Lightbulb className="h-5 w-5 text-amber-500" />
-                      <span className="text-base font-semibold text-neutral-800">Search Examples</span>
-                    </div>
-                  </div>
-                  <div className="py-2 bg-white/95 backdrop-blur-sm">
-                    {searchExamples.map((example, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleExampleClick(example)}
-                        className="w-full text-left px-6 py-4 hover:bg-neutral-50/80 transition-all text-base text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0 font-medium"
-                      >
-                        {example}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </>
+          </div>
         )}
     </div>
   );
