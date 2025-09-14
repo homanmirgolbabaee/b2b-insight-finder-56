@@ -1,6 +1,27 @@
+import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
 export function LoadingSpinner() {
+  const [messageIndex, setMessageIndex] = useState(0);
+  
+  const messages = [
+    "using toolhouse backend ...",
+    "fetching companies ...",
+    "fetching funding data ...",
+    "reaching out to multiple sources...",
+    "hang on ..."
+  ];
+
+  useEffect(() => {
+    if (messageIndex < messages.length - 1) {
+      const timer = setTimeout(() => {
+        setMessageIndex(prev => prev + 1);
+      }, 2000); // Change message every 2 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [messageIndex, messages.length]);
+
   return (
     <div className="flex justify-center items-center py-20">
       <div className="relative">
@@ -26,10 +47,10 @@ export function LoadingSpinner() {
           {/* Professional loading text */}
           <div className="text-center space-y-2">
             <h3 className="text-lg font-semibold text-neutral-900">
-              Analyzing Investment Opportunities
+              using Toolhouse Agent
             </h3>
-            <p className="text-sm text-neutral-600">
-              Using toolhouse backend...
+            <p className="text-sm text-neutral-600 transition-all duration-500 ease-in-out">
+              {messages[messageIndex]}
             </p>
           </div>
         </div>
