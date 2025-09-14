@@ -24,6 +24,7 @@ interface Company {
   location: string;
   last_updated: string;
   investors: string[];
+  logo: string;
   links: {
     news?: string | null;
     linkedin: string;
@@ -207,7 +208,7 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                 onClick={() => handleSort('funding_amount')}
               >
                 <div className="flex items-center justify-end gap-2">
-                  Funding
+                  Funding & Stage
                   {sortConfig?.key === 'funding_amount' ? (
                     sortConfig.direction === 'asc' ? (
                       <ChevronUp className="h-4 w-4 text-brand-primary" />
@@ -219,24 +220,6 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                   )}
                 </div>
               </TableHead>
-              <TableHead 
-                className="font-semibold text-neutral-800 text-right cursor-pointer hover:bg-neutral-100/50 transition-colors py-4"
-                onClick={() => handleSort('valuation')}
-              >
-                <div className="flex items-center justify-end gap-2">
-                  Valuation
-                  {sortConfig?.key === 'valuation' ? (
-                    sortConfig.direction === 'asc' ? (
-                      <ChevronUp className="h-4 w-4 text-brand-primary" />
-                    ) : (
-                      <ChevronDown className="h-4 w-4 text-brand-primary" />
-                    )
-                  ) : (
-                    <ArrowUpDown className="h-4 w-4 text-neutral-400" />
-                  )}
-                </div>
-              </TableHead>
-              <TableHead className="font-semibold text-neutral-800 py-4">Stage</TableHead>
               <TableHead className="font-semibold text-neutral-800 py-4">Score</TableHead>
               <TableHead
                 className="font-semibold text-neutral-800 cursor-pointer hover:bg-neutral-100/50 transition-colors py-4"
@@ -293,47 +276,72 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                       </Button>
                     </TableCell>
                     <TableCell className="py-5">
-                      <div className="font-semibold text-neutral-900 hover:text-brand-primary transition-colors text-[15px]">
-                        {company.name}
-                      </div>
-                      <div className="text-sm text-neutral-500 mt-0.5 font-medium">
-                        {extractCityFromLocation(company.location)}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right py-5">
-                      <div className="flex items-center justify-end gap-2">
-                        {fundingIndicator && (
-                          <div className={`w-2 h-2 rounded-full ${
-                            fundingIndicator.color === 'text-green-600' ? 'bg-green-500' :
-                            fundingIndicator.color === 'text-blue-600' ? 'bg-blue-500' :
-                            fundingIndicator.color === 'text-purple-600' ? 'bg-purple-500' : 'bg-neutral-400'
-                          }`} />
-                        )}
-                        <div className={`font-bold tracking-tight ${
-                          fundingIndicator?.size === 'large' ? 'text-2xl text-green-700' :
-                          fundingIndicator?.size === 'medium' ? 'text-xl text-blue-700' :
-                          'text-lg text-neutral-900'
-                        }`}>
-                          {formatFundingAmount(company.funding_amount)}
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg border border-neutral-200 flex items-center justify-center bg-white overflow-hidden">
+                          {company.logo ? (
+                            <img 
+                              src={company.logo} 
+                              alt={`${company.name} logo`}
+                              className="w-8 h-8 object-contain"
+                              onError={(e) => {
+                                const target = e.currentTarget as HTMLImageElement;
+                                target.style.display = 'none';
+                                const fallback = target.nextElementSibling as HTMLElement;
+                                if (fallback) {
+                                  fallback.style.display = 'flex';
+                                }
+                              }}
+                            />
+                          ) : null}
+                          <div 
+                            className={`w-8 h-8 rounded bg-brand-primary/10 flex items-center justify-center ${company.logo ? 'hidden' : 'flex'}`}
+                          >
+                            <span className="text-xs font-bold text-brand-primary">
+                              {company.name.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="font-semibold text-neutral-900 hover:text-brand-primary transition-colors text-[15px]">
+                            {company.name}
+                          </div>
+                          <div className="text-sm text-neutral-500 mt-0.5 font-medium">
+                            {extractCityFromLocation(company.location)}
+                          </div>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell className="text-right py-5">
-                      <div className="font-bold text-lg text-brand-success tracking-tight">
-                        {company.valuation ? `$${(parseFloat(company.valuation.replace(/[^0-9.]/g, '')) / 1e9).toFixed(1)}B` : 'Private'}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-end gap-2">
+                          {fundingIndicator && (
+                            <div className={`w-2 h-2 rounded-full ${
+                              fundingIndicator.color === 'text-green-600' ? 'bg-green-500' :
+                              fundingIndicator.color === 'text-blue-600' ? 'bg-blue-500' :
+                              fundingIndicator.color === 'text-purple-600' ? 'bg-purple-500' : 'bg-neutral-400'
+                            }`} />
+                          )}
+                          <div className={`font-bold tracking-tight ${
+                            fundingIndicator?.size === 'large' ? 'text-2xl text-green-700' :
+                            fundingIndicator?.size === 'medium' ? 'text-xl text-blue-700' :
+                            'text-lg text-neutral-900'
+                          }`}>
+                            {formatFundingAmount(company.funding_amount)}
+                          </div>
+                        </div>
+                        <div className="flex justify-end">
+                          {stage ? (
+                            <Badge 
+                              variant={getStageVariant(stage)} 
+                              className="font-medium text-xs px-2.5 py-1"
+                            >
+                              {stage}
+                            </Badge>
+                          ) : (
+                            <span className="text-neutral-400 text-sm font-medium">Not disclosed</span>
+                          )}
+                        </div>
                       </div>
-                    </TableCell>
-                    <TableCell className="py-5">
-                      {stage ? (
-                        <Badge 
-                          variant={getStageVariant(stage)} 
-                          className="font-medium text-xs px-2.5 py-1"
-                        >
-                          {stage}
-                        </Badge>
-                      ) : (
-                        <span className="text-neutral-400 text-sm font-medium">Not disclosed</span>
-                      )}
                     </TableCell>
                     <TableCell className="py-5">
                       <div className="flex items-center gap-2">
@@ -413,7 +421,7 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                   {/* Expanded row content */}
                   {isExpanded && (
                     <TableRow className={`${isEven ? 'bg-white' : 'bg-[#fafbfc]'} border-b border-neutral-100/50`}>
-                      <TableCell colSpan={8} className="p-6 pt-0">
+                      <TableCell colSpan={6} className="p-6 pt-0">
                         <div className="space-y-6">
                           <div>
                             <h4 className="font-semibold text-neutral-900 mb-2">Company Overview</h4>
@@ -422,7 +430,13 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                             </p>
                           </div>
                           
-                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div className="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+                              <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Valuation</span>
+                              <p className="text-lg font-bold text-brand-success mt-1">
+                                {company.valuation ? `$${(parseFloat(company.valuation.replace(/[^0-9.]/g, '')) / 1e9).toFixed(1)}B` : 'Private'}
+                              </p>
+                            </div>
                             <div className="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
                               <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Team Size</span>
                               <p className="text-lg font-bold text-neutral-900 mt-1">

@@ -13,6 +13,7 @@ interface Company {
   location: string;
   last_updated: string;
   investors: string[];
+  logo: string;
   links: {
     news?: string | null;
     linkedin: string;
