@@ -74,22 +74,6 @@ export function FilterBubbles({ onFilterSelect, selectedFilters, onFilterRemove,
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      {/* Header with refresh button */}
-      <div className="flex items-center justify-center mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-text-secondary">Quick filters:</span>
-          <Button
-            onClick={handleRefresh}
-            disabled={isRefreshing}
-            variant="ghost"
-            size="sm"
-            className="h-6 w-6 p-0 hover:bg-muted/50 transition-all duration-200"
-          >
-            <RefreshCw className={`h-3 w-3 transition-all duration-500 ${isRefreshing ? 'animate-spin' : ''}`} />
-          </Button>
-        </div>
-      </div>
-
       {/* Selected Filters */}
       {selectedFilters.length > 0 && (
         <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
@@ -122,7 +106,7 @@ export function FilterBubbles({ onFilterSelect, selectedFilters, onFilterRemove,
       )}
 
       {/* Simplified Filter Bubbles */}
-      <div className="flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto">
+      <div className="flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto relative">
         {currentBubbles.map((bubble, index) => (
           <Button
             key={`${currentSetIndex}-${bubble.id}`}
@@ -145,6 +129,17 @@ export function FilterBubbles({ onFilterSelect, selectedFilters, onFilterRemove,
             {bubble.label}
           </Button>
         ))}
+        
+        {/* Refresh button positioned at the end */}
+        <Button
+          onClick={handleRefresh}
+          disabled={isRefreshing}
+          variant="ghost"
+          size="sm"
+          className="h-5 w-5 p-0 hover:bg-muted/50 transition-all duration-200 ml-2"
+        >
+          <RefreshCw className={`h-2.5 w-2.5 transition-all duration-500 ${isRefreshing ? 'animate-spin' : ''}`} />
+        </Button>
       </div>
     </div>
   );
