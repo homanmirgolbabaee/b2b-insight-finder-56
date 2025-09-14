@@ -7,11 +7,13 @@ interface Company {
   funding_or_launch_news: string;
   funding_amount: string;
   funding_stage: string;
+  valuation: string;
   revenue_range: string;
   team_size: number;
   founded: string;
   location: string;
   last_updated: string;
+  investors: string[];
   links: {
     news?: string | null;
     linkedin: string;

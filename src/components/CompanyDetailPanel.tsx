@@ -10,11 +10,13 @@ interface Company {
   funding_or_launch_news: string;
   funding_amount: string;
   funding_stage: string;
+  valuation: string;
   revenue_range: string;
   team_size: number;
   founded: string;
   location: string;
   last_updated: string;
+  investors: string[];
   links: {
     news?: string | null;
     linkedin: string;
@@ -77,36 +79,76 @@ export function CompanyDetailPanel({ company, onClose, similarCompanies = [] }: 
             </p>
           </div>
 
-          {/* Company Metrics */}
+          {/* Investment Metrics */}
           <div>
-            <h3 className="text-lg font-semibold text-text-primary mb-3">Company Details</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <div className="text-sm text-text-secondary">Funding Amount</div>
-                <div className="font-medium text-text-primary">
-                  {company.funding_amount || "Not available publicly"}
+            <h3 className="text-lg font-semibold text-text-primary mb-4">Investment Metrics</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Primary Metrics */}
+              <div className="space-y-4">
+                <div className="bg-gradient-to-r from-brand-primary/5 to-brand-secondary/5 rounded-lg p-4 border border-brand-primary/10">
+                  <div className="text-sm font-medium text-text-secondary mb-1">Total Funding</div>
+                  <div className="text-2xl font-bold text-brand-primary">
+                    {company.funding_amount ? `$${(parseFloat(company.funding_amount.replace(/[^0-9.]/g, '')) / 1e9).toFixed(1)}B` : "Undisclosed"}
+                  </div>
+                  <div className="text-xs text-text-tertiary mt-1">{company.funding_stage || "Funding Stage"}</div>
+                </div>
+                
+                <div className="bg-gradient-to-r from-brand-success/5 to-brand-accent/5 rounded-lg p-4 border border-brand-success/10">
+                  <div className="text-sm font-medium text-text-secondary mb-1">Valuation</div>
+                  <div className="text-2xl font-bold text-brand-success">
+                    {company.valuation ? `$${(parseFloat(company.valuation.replace(/[^0-9.]/g, '')) / 1e9).toFixed(1)}B` : "Private"}
+                  </div>
+                  <div className="text-xs text-text-tertiary mt-1">Post-money valuation</div>
                 </div>
               </div>
-              <div className="space-y-2">
-                <div className="text-sm text-text-secondary">Funding Stage</div>
-                <div className="font-medium text-text-primary">
-                  {company.funding_stage || "Not available publicly"}
+
+              {/* Secondary Metrics */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+                    <div className="text-xs text-text-secondary mb-1">Team Size</div>
+                    <div className="font-semibold text-text-primary">
+                      {company.team_size > 0 ? `${company.team_size}+` : "Private"}
+                    </div>
+                  </div>
+                  <div className="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+                    <div className="text-xs text-text-secondary mb-1">Founded</div>
+                    <div className="font-semibold text-text-primary">
+                      {company.founded || "Private"}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-sm text-text-secondary">Team Size</div>
-                <div className="font-medium text-text-primary">
-                  {company.team_size > 0 ? `${company.team_size} employees` : "Not available publicly"}
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-sm text-text-secondary">Revenue Range</div>
-                <div className="font-medium text-text-primary">
-                  {company.revenue_range || "Not available publicly"}
+                
+                <div className="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+                  <div className="text-xs text-text-secondary mb-1">Revenue Range</div>
+                  <div className="font-semibold text-text-primary">
+                    {company.revenue_range || "Private"}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Investors */}
+          {company.investors && company.investors.length > 0 && (
+            <div>
+              <h3 className="text-lg font-semibold text-text-primary mb-3">Key Investors</h3>
+              <div className="flex flex-wrap gap-2">
+                {company.investors.map((investor, index) => (
+                  <Badge 
+                    key={index} 
+                    variant="outline" 
+                    className="bg-brand-primary/5 border-brand-primary/20 text-brand-primary hover:bg-brand-primary/10 px-3 py-1"
+                  >
+                    {investor}
+                  </Badge>
+                ))}
+              </div>
+              <div className="text-xs text-text-tertiary mt-2">
+                {company.investors.length} institutional investor{company.investors.length !== 1 ? 's' : ''}
+              </div>
+            </div>
+          )}
 
           {/* Funding/Launch News */}
           {company.funding_or_launch_news && (

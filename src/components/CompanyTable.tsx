@@ -17,11 +17,13 @@ interface Company {
   funding_or_launch_news: string;
   funding_amount: string;
   funding_stage: string;
+  valuation: string;
   revenue_range: string;
   team_size: number;
   founded: string;
   location: string;
   last_updated: string;
+  investors: string[];
   links: {
     news?: string | null;
     linkedin: string;
@@ -163,7 +165,7 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
     let bVal = b[key];
     
     // Handle special cases
-    if (key === 'funding_amount') {
+    if (key === 'funding_amount' || key === 'valuation') {
       // Extract numbers for comparison
       const aNum = parseFloat(String(aVal).replace(/[^0-9.]/g, '')) || 0;
       const bNum = parseFloat(String(bVal).replace(/[^0-9.]/g, '')) || 0;
@@ -207,6 +209,23 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                 <div className="flex items-center justify-end gap-2">
                   Funding
                   {sortConfig?.key === 'funding_amount' ? (
+                    sortConfig.direction === 'asc' ? (
+                      <ChevronUp className="h-4 w-4 text-brand-primary" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4 text-brand-primary" />
+                    )
+                  ) : (
+                    <ArrowUpDown className="h-4 w-4 text-neutral-400" />
+                  )}
+                </div>
+              </TableHead>
+              <TableHead 
+                className="font-semibold text-neutral-800 text-right cursor-pointer hover:bg-neutral-100/50 transition-colors py-4"
+                onClick={() => handleSort('valuation')}
+              >
+                <div className="flex items-center justify-end gap-2">
+                  Valuation
+                  {sortConfig?.key === 'valuation' ? (
                     sortConfig.direction === 'asc' ? (
                       <ChevronUp className="h-4 w-4 text-brand-primary" />
                     ) : (
@@ -299,6 +318,11 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                         </div>
                       </div>
                     </TableCell>
+                    <TableCell className="text-right py-5">
+                      <div className="font-bold text-lg text-brand-success tracking-tight">
+                        {company.valuation ? `$${(parseFloat(company.valuation.replace(/[^0-9.]/g, '')) / 1e9).toFixed(1)}B` : 'Private'}
+                      </div>
+                    </TableCell>
                     <TableCell className="py-5">
                       {stage ? (
                         <Badge 
@@ -389,42 +413,67 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                   {/* Expanded row content */}
                   {isExpanded && (
                     <TableRow className={`${isEven ? 'bg-white' : 'bg-[#fafbfc]'} border-b border-neutral-100/50`}>
-                      <TableCell colSpan={7} className="p-6 pt-0">
-                        <div className="space-y-4">
+                      <TableCell colSpan={8} className="p-6 pt-0">
+                        <div className="space-y-6">
                           <div>
-                            <h4 className="font-semibold text-neutral-900 mb-2">Description</h4>
+                            <h4 className="font-semibold text-neutral-900 mb-2">Company Overview</h4>
                             <p className="text-neutral-700 leading-relaxed">
                               {company.description}
                             </p>
                           </div>
                           
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                              <span className="text-sm font-medium text-neutral-500">Team Size</span>
-                              <p className="text-neutral-900 font-semibold">
-                                {company.team_size > 0 ? company.team_size : "Not available publicly"}
+                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div className="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+                              <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Team Size</span>
+                              <p className="text-lg font-bold text-neutral-900 mt-1">
+                                {company.team_size > 0 ? `${company.team_size}+` : "Private"}
                               </p>
                             </div>
-                            <div>
-                              <span className="text-sm font-medium text-neutral-500">Founded</span>
-                              <p className="text-neutral-900 font-semibold">
-                                {company.founded || "Not available publicly"}
+                            <div className="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+                              <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Founded</span>
+                              <p className="text-lg font-bold text-neutral-900 mt-1">
+                                {company.founded || "Private"}
                               </p>
                             </div>
-                            <div>
-                              <span className="text-sm font-medium text-neutral-500">Revenue Range</span>
-                              <p className="text-neutral-900 font-semibold">
-                                {company.revenue_range || "Not available publicly"}
+                            <div className="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+                              <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Revenue Range</span>
+                              <p className="text-lg font-bold text-neutral-900 mt-1">
+                                {company.revenue_range || "Private"}
+                              </p>
+                            </div>
+                            <div className="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+                              <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Last Updated</span>
+                              <p className="text-lg font-bold text-neutral-900 mt-1">
+                                {formatDate(company.last_updated)}
                               </p>
                             </div>
                           </div>
+
+                          {/* Investors Section */}
+                          {company.investors && company.investors.length > 0 && (
+                            <div>
+                              <h4 className="font-semibold text-neutral-900 mb-3">Key Investors ({company.investors.length})</h4>
+                              <div className="flex flex-wrap gap-2">
+                                {company.investors.map((investor, index) => (
+                                  <Badge 
+                                    key={index} 
+                                    variant="outline" 
+                                    className="bg-brand-primary/5 border-brand-primary/20 text-brand-primary hover:bg-brand-primary/10 px-3 py-1.5 font-medium"
+                                  >
+                                    {investor}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                           
                           {company.funding_or_launch_news && (
                             <div className="bg-gradient-to-r from-brand-primary/10 via-brand-secondary/10 to-brand-accent/10 rounded-lg p-4 border-l-4 border-brand-primary">
-                              <h5 className="text-xs text-brand-primary font-bold uppercase tracking-wider mb-2">
+                              <h5 className="text-xs text-brand-primary font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
+                                <TrendingUp className="h-3 w-3" />
                                 Latest Funding News
                               </h5>
-                              <p className="text-sm text-neutral-800 leading-relaxed">
+                              <p className="text-sm text-neutral-800 leading-relaxed font-medium">
                                 {company.funding_or_launch_news}
                               </p>
                             </div>
