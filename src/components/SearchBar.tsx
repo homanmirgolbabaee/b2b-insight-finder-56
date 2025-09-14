@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, Grid3X3, ChevronDown, Lightbulb } from "lucide-react";
+import { Search, Grid3X3, ChevronDown, Lightbulb, Building, Zap } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
@@ -57,6 +57,18 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
           <div className="relative group">
             <div className="relative bg-white rounded-xl border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-200 group-focus-within:border-neutral-400 group-focus-within:shadow-md">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400 group-focus-within:text-neutral-600 h-5 w-5 transition-colors duration-200" />
+              
+              {/* Toolhouse logo in the middle */}
+              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-20 group-focus-within:opacity-10 transition-opacity duration-200">
+                <div className="flex items-center gap-1">
+                  <div className="relative">
+                    <Building className="h-4 w-4 text-neutral-400" />
+                    <Zap className="h-2 w-2 text-brand-primary absolute -top-0.5 -right-0.5" />
+                  </div>
+                  <span className="text-xs font-medium text-neutral-400">Toolhouse</span>
+                </div>
+              </div>
+              
               <Input
                 type="text"
                 placeholder='Search companies, founders, industries...'
