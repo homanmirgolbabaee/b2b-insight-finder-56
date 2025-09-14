@@ -4,13 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import { FilterBubbles } from "./FilterBubbles";
-
-interface FilterBubble {
-  id: string;
-  label: string;
-  category: string;
-  searchTerm: string;
-}
+import { FilterBubble, allFilterBubbles } from "@/data/filterBubbles";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -53,36 +47,23 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
   };
 
   const handleFilterSelect = (searchTerm: string) => {
-    // Find the corresponding filter bubble
-    const filterBubbles = [
-      { id: "ai", label: "AI", category: "industry", searchTerm: "AI companies" },
-      { id: "fintech", label: "Fintech", category: "industry", searchTerm: "fintech startups" },
-      { id: "healthcare", label: "Healthcare", category: "industry", searchTerm: "healthcare companies" },
-      { id: "saas", label: "SaaS", category: "industry", searchTerm: "SaaS companies" },
-      { id: "ecommerce", label: "E-commerce", category: "industry", searchTerm: "e-commerce companies" },
-      { id: "seed", label: "Seed", category: "funding", searchTerm: "seed funding" },
-      { id: "series-a", label: "Series A", category: "funding", searchTerm: "Series A funding" },
-      { id: "series-b", label: "Series B", category: "funding", searchTerm: "Series B funding" },
-      { id: "growth", label: "Growth", category: "funding", searchTerm: "growth stage companies" },
-      { id: "startup", label: "Startup", category: "size", searchTerm: "early stage startups" },
-      { id: "scaleup", label: "Scale-up", category: "size", searchTerm: "scale-up companies" },
-      { id: "unicorn", label: "Unicorn", category: "size", searchTerm: "unicorn companies" },
-      { id: "usa", label: "USA", category: "location", searchTerm: "companies in USA" },
-      { id: "europe", label: "Europe", category: "location", searchTerm: "European companies" },
-      { id: "asia", label: "Asia", category: "location", searchTerm: "Asian companies" },
-      { id: "2024", label: "2024", category: "timeline", searchTerm: "companies in 2024" },
-      { id: "2023", label: "2023", category: "timeline", searchTerm: "companies in 2023" },
-      { id: "recent", label: "Recent", category: "timeline", searchTerm: "recent companies" },
-    ];
+    console.log("handleFilterSelect called with:", searchTerm);
     
-    const bubble = filterBubbles.find(b => b.searchTerm === searchTerm);
+    const bubble = allFilterBubbles.find(b => b.searchTerm === searchTerm);
+    console.log("Found bubble:", bubble);
+    console.log("Current selectedFilters:", selectedFilters);
+    
     if (bubble && !selectedFilters.some(f => f.id === bubble.id)) {
-      setSelectedFilters(prev => [...prev, bubble]);
+      const newFilters = [...selectedFilters, bubble];
+      setSelectedFilters(newFilters);
       
       // Build combined query
-      const filterTerms = [...selectedFilters, bubble].map(f => f.searchTerm);
+      const filterTerms = newFilters.map(f => f.searchTerm);
       const combinedQuery = filterTerms.join(" and ");
       setQuery(combinedQuery);
+      console.log("Updated query to:", combinedQuery);
+    } else {
+      console.log("Bubble not found or already selected");
     }
   };
 
