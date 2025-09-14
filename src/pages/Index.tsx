@@ -232,16 +232,14 @@ const Index = () => {
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             <div className="text-center lg:text-left">
               <p className="text-sm text-text-secondary font-medium">
-                © 2024 Investment Research Platform. Professional startup intelligence.
+                Powered by Toolhouse.ai and Exa.ai
               </p>
               <p className="text-xs text-text-tertiary mt-1">
                 Advanced AI-powered market research and company analysis.
               </p>
             </div>
             <div className="text-center lg:text-right">
-              <p className="text-xs text-text-tertiary">
-                Powered by <span className="font-medium text-text-secondary">Toolhouse AI</span>
-              </p>
+              <img src="/src/assets/toolhouse-logo.png" alt="Toolhouse" className="h-6 opacity-60" />
             </div>
           </div>
         </div>
