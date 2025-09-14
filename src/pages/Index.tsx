@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { Search, ExternalLink, TrendingUp, Building2, Users, Target } from "lucide-react";
+import { Search, User, LogOut, Building2, TrendingUp, Target } from "lucide-react";
 import { InvestmentSummary } from "@/components/InvestmentSummary";
 import { SearchBar } from "@/components/SearchBar";
 import { SearchCards } from "@/components/SearchCards";
 import { CompanyTable } from "@/components/CompanyTable";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { CompanyFilters } from "@/components/CompanyFilters";
 import { CompanyDetailPanel } from "@/components/CompanyDetailPanel";
-import { ExportTools } from "@/components/ExportTools";
 import { InvestmentFilters } from "@/components/InvestmentFilters";
+import { UserDashboard } from "@/components/UserDashboard";
 import { useCompanySearch } from "@/hooks/useCompanySearch";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -51,6 +50,7 @@ const Index = () => {
     locations: []
   });
   const [searchQuery, setSearchQuery] = useState("");
+  const [showDashboard, setShowDashboard] = useState(false);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -73,20 +73,43 @@ const Index = () => {
     return companies.filter(c => c.name !== company.name).slice(0, 3);
   };
 
+  if (showDashboard) {
+    return <UserDashboard onClose={() => setShowDashboard(false)} />;
+  }
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Clean header */}
-      <header className="border-b border-neutral-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div className="min-h-screen bg-gradient-hero">
+      {/* Professional header with user navigation */}
+      <header className="border-b border-neutral-300 bg-surface/95 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <Search className="h-4 w-4 text-white" />
+              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center shadow-card">
+                <Building2 className="h-4 w-4 text-white" />
               </div>
-              <h1 className="text-xl font-semibold text-neutral-900">Research Platform</h1>
+              <div>
+                <h1 className="text-xl font-semibold text-text-primary">Investment Research Platform</h1>
+                <p className="text-xs text-text-secondary">Professional startup intelligence</p>
+              </div>
             </div>
-            <div className="text-sm text-neutral-500">
-              Powered by Toolhouse
+            <div className="flex items-center space-x-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowDashboard(true)}
+                className="text-text-secondary hover:text-text-primary hover:bg-surface-elevated"
+              >
+                <User className="h-4 w-4 mr-2" />
+                Dashboard
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-text-secondary hover:text-text-primary hover:bg-surface-elevated"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
             </div>
           </div>
         </div>
@@ -95,87 +118,109 @@ const Index = () => {
       {/* Main search interface */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="space-y-8">
-          {/* Search modes */}
-          <div className="flex flex-wrap gap-2 justify-center">
-            <button
-              onClick={() => setShowCardMode(false)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                !showCardMode 
-                  ? 'bg-neutral-900 text-white shadow-sm' 
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-              }`}
-            >
-              Custom Search
-            </button>
-            <button
-              onClick={() => setShowCardMode(true)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                showCardMode 
-                  ? 'bg-neutral-900 text-white shadow-sm' 
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-              }`}
-            >
-              Quick Research
-            </button>
+          {/* Professional search modes */}
+          <div className="flex justify-center">
+            <div className="bg-surface rounded-lg p-1 shadow-card border border-neutral-300">
+              <div className="flex gap-1">
+                <button
+                  onClick={() => setShowCardMode(false)}
+                  className={`px-6 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                    !showCardMode 
+                      ? 'bg-brand-primary text-white shadow-sm' 
+                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-elevated'
+                  }`}
+                >
+                  Custom Search
+                </button>
+                <button
+                  onClick={() => setShowCardMode(true)}
+                  className={`px-6 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                    showCardMode 
+                      ? 'bg-brand-primary text-white shadow-sm' 
+                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-elevated'
+                  }`}
+                >
+                  Quick Research
+                </button>
+              </div>
+            </div>
           </div>
 
-          {/* Search interface */}
+          {/* Professional search interface */}
           {!showCardMode ? (
-            <div className="space-y-6">
-              <div className="text-center space-y-2">
-                <h2 className="text-2xl font-semibold text-neutral-900">
-                  What would you like to research?
-                </h2>
-                <p className="text-neutral-600">
-                  Search for companies, founders, or explore specific industries
-                </p>
+            <Card className="max-w-4xl mx-auto p-8 bg-gradient-card shadow-premium">
+              <div className="space-y-6">
+                <div className="text-center space-y-3">
+                  <h2 className="text-2xl font-semibold text-text-primary">
+                    Advanced Investment Research
+                  </h2>
+                  <p className="text-text-secondary">
+                    Search for companies, funding rounds, or explore specific market segments
+                  </p>
+                </div>
+                
+                <SearchBar 
+                  onSearch={handleSearch} 
+                  isLoading={isLoading}
+                  showCardMode={false}
+                  onToggleMode={() => {}}
+                  heroMode={true}
+                />
               </div>
-              
-              <SearchBar 
-                onSearch={handleSearch} 
-                isLoading={isLoading}
-                showCardMode={false}
-                onToggleMode={() => {}}
-                heroMode={true}
-              />
-            </div>
+            </Card>
           ) : (
-            <div className="space-y-6">
-              <div className="text-center space-y-2">
-                <h2 className="text-2xl font-semibold text-neutral-900">
-                  Choose a research source
-                </h2>
-                <p className="text-neutral-600">
-                  Select from curated data sources for instant insights
-                </p>
+            <Card className="max-w-6xl mx-auto p-8 bg-gradient-card shadow-premium">
+              <div className="space-y-6">
+                <div className="text-center space-y-3">
+                  <h2 className="text-2xl font-semibold text-text-primary">
+                    Quick Research Templates
+                  </h2>
+                  <p className="text-text-secondary">
+                    Select from curated research templates for instant market intelligence
+                  </p>
+                </div>
+                
+                <SearchCards onCardClick={handleCardClick} isLoading={isLoading} />
               </div>
-              
-              <SearchCards onCardClick={handleCardClick} isLoading={isLoading} />
-            </div>
+            </Card>
           )}
 
-          {/* Results */}
+          {/* Professional results section */}
           {isLoading && <LoadingSpinner />}
           
           {error && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-center">
-              <p className="text-red-700 text-sm">{error}</p>
-            </div>
+            <Card className="max-w-md mx-auto p-6 bg-gradient-card shadow-card border border-brand-error/20">
+              <div className="text-center">
+                <p className="text-brand-error font-medium">{error}</p>
+              </div>
+            </Card>
           )}
           
           {filteredCompanies.length > 0 && !isLoading && (
             <div className="space-y-6">
-              <InvestmentSummary companies={filteredCompanies} />
+              <Card className="p-6 bg-gradient-card shadow-premium">
+                <InvestmentSummary companies={filteredCompanies} />
+              </Card>
               
-              <InvestmentFilters 
-                activeFilters={activeFilters}
-                onFiltersChange={setActiveFilters}
-              />
-              
-              <CompanyTable 
-                companies={filteredCompanies}
-                onCompanyClick={handleCompanyClick}
-              />
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div className="lg:col-span-1">
+                  <Card className="p-6 bg-gradient-card shadow-card">
+                    <InvestmentFilters 
+                      activeFilters={activeFilters}
+                      onFiltersChange={setActiveFilters}
+                    />
+                  </Card>
+                </div>
+                
+                <div className="lg:col-span-3">
+                  <Card className="bg-gradient-card shadow-premium">
+                    <CompanyTable 
+                      companies={filteredCompanies}
+                      onCompanyClick={handleCompanyClick}
+                    />
+                  </Card>
+                </div>
+              </div>
             </div>
           )}
         </div>
