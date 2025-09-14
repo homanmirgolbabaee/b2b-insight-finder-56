@@ -84,12 +84,14 @@ const Index = () => {
         <div className="container-max section-padding py-3 sm:py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-4 min-w-0">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow flex-shrink-0">
-                <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-              </div>
+              <img 
+                src="/src/assets/toolhouse-logo.png" 
+                alt="Toolhouse" 
+                className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0" 
+              />
               <div className="min-w-0">
-                <h1 className="text-base sm:text-lg lg:text-xl font-bold text-text-primary tracking-tight truncate">Investment Research Platform</h1>
-                <p className="text-xs sm:text-sm text-text-secondary font-medium hidden sm:block">Professional startup intelligence</p>
+                <h1 className="text-base sm:text-lg lg:text-xl font-bold text-text-primary tracking-tight truncate">Toolhouse.ai</h1>
+                <p className="text-xs sm:text-sm text-text-secondary font-medium hidden sm:block">AI-powered startup intelligence</p>
               </div>
             </div>
             <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
@@ -152,10 +154,10 @@ const Index = () => {
               <div className="space-y-6 sm:space-y-8">
                 <div className="text-center space-y-3 sm:space-y-4">
                   <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-text-primary tracking-tight">
-                    Advanced Investment Research
+                    Discover Startups with AI
                   </h2>
                   <p className="text-sm sm:text-base lg:text-lg text-text-secondary font-medium max-w-2xl mx-auto px-4">
-                    Search for companies, funding rounds, or explore specific market segments with AI-powered insights
+                    Find companies, analyze funding, and explore markets with intelligent search
                   </p>
                 </div>
                 
@@ -173,10 +175,10 @@ const Index = () => {
               <div className="space-y-6 sm:space-y-8">
                 <div className="text-center space-y-3 sm:space-y-4">
                   <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-text-primary tracking-tight">
-                    Quick Research Templates
+                    Quick Research
                   </h2>
                   <p className="text-sm sm:text-base lg:text-lg text-text-secondary font-medium max-w-2xl mx-auto px-4">
-                    Select from curated research templates for instant market intelligence
+                    Start with curated templates for instant insights
                   </p>
                 </div>
                 
@@ -226,21 +228,13 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Professional Footer */}
+      {/* Footer */}
       <footer className="border-t border-neutral-200/60 bg-surface/98 backdrop-blur-md mt-16">
         <div className="container-max section-padding py-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-            <div className="text-center lg:text-left">
-              <p className="text-sm text-text-secondary font-medium">
-                Powered by Toolhouse.ai and Exa.ai
-              </p>
-              <p className="text-xs text-text-tertiary mt-1">
-                Advanced AI-powered market research and company analysis.
-              </p>
-            </div>
-            <div className="text-center lg:text-right">
-              <img src="/src/assets/toolhouse-logo.png" alt="Toolhouse" className="h-6 opacity-60" />
-            </div>
+          <div className="text-center">
+            <p className="text-sm text-text-secondary font-medium">
+              Powered by Toolhouse.ai and Exa.ai
+            </p>
           </div>
         </div>
       </footer>
