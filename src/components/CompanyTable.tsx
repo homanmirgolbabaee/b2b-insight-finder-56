@@ -115,40 +115,6 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
     return { color: 'text-neutral-500', size: 'small' };
   };
 
-  const getInvestmentScore = (company: Company) => {
-    let score = 0;
-    
-    // Funding amount scoring
-    const match = company.funding_amount?.match(/\$?([\d.]+)\s*(B|M|K)?/i);
-    if (match) {
-      const value = parseFloat(match[1]);
-      const unit = match[2]?.toUpperCase();
-      if (unit === 'B') score += 40;
-      else if (unit === 'M' && value >= 100) score += 30;
-      else if (unit === 'M' && value >= 50) score += 20;
-      else score += 10;
-    }
-    
-    // Stage scoring
-    const stage = company.funding_stage?.toLowerCase();
-    if (stage?.includes('series c')) score += 20;
-    else if (stage?.includes('series b')) score += 15;
-    else if (stage?.includes('series a')) score += 10;
-    else if (stage?.includes('seed')) score += 5;
-    
-    // Team size scoring
-    if (company.team_size > 500) score += 15;
-    else if (company.team_size > 100) score += 10;
-    else if (company.team_size > 50) score += 5;
-    
-    // Recent activity scoring (placeholder)
-    const currentYear = new Date().getFullYear();
-    const lastUpdatedYear = new Date(company.last_updated).getFullYear();
-    if (lastUpdatedYear === currentYear) score += 15;
-    else if (lastUpdatedYear === currentYear - 1) score += 5;
-    
-    return Math.min(score, 100);
-  };
 
   const handleSort = (key: keyof Company) => {
     let direction: 'asc' | 'desc' = 'asc';
@@ -220,7 +186,7 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                   )}
                 </div>
               </TableHead>
-              <TableHead className="font-semibold text-neutral-800 py-4">Score</TableHead>
+              
               <TableHead
                 className="font-semibold text-neutral-800 cursor-pointer hover:bg-neutral-100/50 transition-colors py-4"
                 onClick={() => handleSort('last_updated')}
@@ -247,7 +213,7 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
               const isEven = index % 2 === 0;
               const stage = formatStage(company.funding_stage);
               const fundingIndicator = getFundingIndicator(company.funding_amount);
-              const investmentScore = getInvestmentScore(company);
+              
               
               return (
                 <>
@@ -341,21 +307,6 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                             <span className="text-neutral-400 text-sm font-medium">Not disclosed</span>
                           )}
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="py-5">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                          investmentScore >= 80 ? 'bg-green-100 text-green-700' :
-                          investmentScore >= 60 ? 'bg-blue-100 text-blue-700' :
-                          investmentScore >= 40 ? 'bg-purple-100 text-purple-700' :
-                          'bg-neutral-100 text-neutral-600'
-                        }`}>
-                          {investmentScore}
-                        </div>
-                        {investmentScore >= 70 && (
-                          <TrendingUp className="h-3 w-3 text-green-600" />
-                        )}
                       </div>
                     </TableCell>
                     <TableCell className="py-5">

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { dashboardStore } from "@/stores/dashboardStore";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +22,19 @@ interface UserDashboardProps {
 
 export const UserDashboard = ({ onClose }: UserDashboardProps) => {
   const [activeTab, setActiveTab] = useState("overview");
+  const [stats, setStats] = useState(dashboardStore.getStats());
+  const [searchHistory, setSearchHistory] = useState(dashboardStore.getSearchHistory());
+  const [savedCompanies, setSavedCompanies] = useState(dashboardStore.getSavedCompanies());
+
+  useEffect(() => {
+    const unsubscribe = dashboardStore.subscribe(() => {
+      setStats(dashboardStore.getStats());
+      setSearchHistory(dashboardStore.getSearchHistory());
+      setSavedCompanies(dashboardStore.getSavedCompanies());
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50">
@@ -94,7 +108,7 @@ export const UserDashboard = ({ onClose }: UserDashboardProps) => {
                       </div>
                       <div>
                         <p className="text-sm text-text-secondary">Total Searches</p>
-                        <p className="text-xl font-semibold text-text-primary">47</p>
+                        <p className="text-xl font-semibold text-text-primary">{stats.totalSearches}</p>
                       </div>
                     </div>
                   </Card>
@@ -105,7 +119,7 @@ export const UserDashboard = ({ onClose }: UserDashboardProps) => {
                       </div>
                       <div>
                         <p className="text-sm text-text-secondary">Companies Found</p>
-                        <p className="text-xl font-semibold text-text-primary">1,247</p>
+                        <p className="text-xl font-semibold text-text-primary">{stats.companiesFound.toLocaleString()}</p>
                       </div>
                     </div>
                   </Card>
@@ -116,7 +130,7 @@ export const UserDashboard = ({ onClose }: UserDashboardProps) => {
                       </div>
                       <div>
                         <p className="text-sm text-text-secondary">Saved</p>
-                        <p className="text-xl font-semibold text-text-primary">23</p>
+                        <p className="text-xl font-semibold text-text-primary">{stats.savedCompanies}</p>
                       </div>
                     </div>
                   </Card>
@@ -127,7 +141,7 @@ export const UserDashboard = ({ onClose }: UserDashboardProps) => {
                       </div>
                       <div>
                         <p className="text-sm text-text-secondary">This Month</p>
-                        <p className="text-xl font-semibold text-text-primary">+18%</p>
+                        <p className="text-xl font-semibold text-text-primary">{stats.monthlyGrowth}</p>
                       </div>
                     </div>
                   </Card>
@@ -137,20 +151,21 @@ export const UserDashboard = ({ onClose }: UserDashboardProps) => {
                 <Card className="p-6 bg-gradient-card shadow-card">
                   <h3 className="text-lg font-semibold text-text-primary mb-4">Recent Activity</h3>
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between p-3 bg-surface rounded-md border">
-                      <div>
-                        <p className="font-medium text-text-primary">AI Startups Series B</p>
-                        <p className="text-sm text-text-secondary">Found 12 companies</p>
-                      </div>
-                      <Badge variant="secondary">2 hours ago</Badge>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-surface rounded-md border">
-                      <div>
-                        <p className="font-medium text-text-primary">Healthcare Tech $10M+</p>
-                        <p className="text-sm text-text-secondary">Found 8 companies</p>
-                      </div>
-                      <Badge variant="secondary">1 day ago</Badge>
-                    </div>
+                    {searchHistory.length === 0 ? (
+                      <p className="text-text-secondary text-center py-4">No searches yet. Start by searching for companies!</p>
+                    ) : (
+                      searchHistory.slice(0, 5).map((search, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-surface rounded-md border">
+                          <div>
+                            <p className="font-medium text-text-primary">{search.query}</p>
+                            <p className="text-sm text-text-secondary">Found {search.results} companies</p>
+                          </div>
+                          <Badge variant="secondary">
+                            {new Date(search.timestamp).toLocaleDateString()}
+                          </Badge>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </Card>
               </div>
@@ -191,13 +206,64 @@ export const UserDashboard = ({ onClose }: UserDashboardProps) => {
               </Card>
             )}
 
-            {/* Placeholder for other tabs */}
-            {activeTab !== "overview" && activeTab !== "subscription" && (
+            {activeTab === "searches" && (
               <Card className="p-6 bg-gradient-card shadow-card">
-                <h3 className="text-lg font-semibold text-text-primary mb-4">
-                  {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-                </h3>
-                <p className="text-text-secondary">This section is coming soon...</p>
+                <h3 className="text-lg font-semibold text-text-primary mb-4">Search History</h3>
+                <div className="space-y-3">
+                  {searchHistory.length === 0 ? (
+                    <p className="text-text-secondary text-center py-8">No searches yet. Start exploring!</p>
+                  ) : (
+                    searchHistory.map((search, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-surface rounded-md border">
+                        <div>
+                          <p className="font-medium text-text-primary">{search.query}</p>
+                          <p className="text-sm text-text-secondary">Found {search.results} companies</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-text-secondary">
+                            {search.timestamp.toLocaleDateString()}
+                          </p>
+                          <p className="text-xs text-text-secondary">
+                            {search.timestamp.toLocaleTimeString()}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </Card>
+            )}
+
+            {activeTab === "saved" && (
+              <Card className="p-6 bg-gradient-card shadow-card">
+                <h3 className="text-lg font-semibold text-text-primary mb-4">Saved Companies</h3>
+                <div className="space-y-3">
+                  {savedCompanies.length === 0 ? (
+                    <p className="text-text-secondary text-center py-8">No saved companies yet. Save companies from search results!</p>
+                  ) : (
+                    savedCompanies.map((company, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-surface rounded-md border">
+                        <div>
+                          <p className="font-medium text-text-primary">{company.name}</p>
+                          <p className="text-sm text-text-secondary">{company.stage} • {company.amount}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-text-secondary">
+                            Saved {company.savedAt.toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </Card>
+            )}
+
+            {/* Placeholder for settings tab */}
+            {activeTab === "settings" && (
+              <Card className="p-6 bg-gradient-card shadow-card">
+                <h3 className="text-lg font-semibold text-text-primary mb-4">Settings</h3>
+                <p className="text-text-secondary">Settings panel coming soon...</p>
               </Card>
             )}
           </div>

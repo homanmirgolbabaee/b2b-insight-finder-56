@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import { dashboardStore } from "@/stores/dashboardStore";
 
 interface Company {
   name: string;
@@ -46,12 +47,22 @@ export function useCompanySearch() {
             try {
               const data: SearchResponse = JSON.parse(buffer.trim());
               if (data.companies && Array.isArray(data.companies)) {
-                setCompanies(prevCompanies => {
-                  // Avoid duplicates by filtering out companies with the same name
-                  const existingNames = new Set(prevCompanies.map(c => c.name));
-                  const newCompanies = data.companies.filter(c => !existingNames.has(c.name));
-                  return [...prevCompanies, ...newCompanies];
-                });
+                    setCompanies(prevCompanies => {
+                      // Avoid duplicates by filtering out companies with the same name
+                      const existingNames = new Set(prevCompanies.map(c => c.name));
+                      const newCompanies = data.companies.filter(c => !existingNames.has(c.name));
+                      const updatedCompanies = [...prevCompanies, ...newCompanies];
+                      
+                      // Track in dashboard if this is the final result
+                      if (newCompanies.length > 0) {
+                        setTimeout(() => {
+                          const currentQuery = (document.querySelector('input[placeholder*="AI startups"]') as HTMLInputElement)?.value || 'Search';
+                          dashboardStore.addSearch(currentQuery, updatedCompanies.length);
+                        }, 100);
+                      }
+                      
+                      return updatedCompanies;
+                    });
               }
             } catch (e) {
               console.warn('Failed to parse final JSON:', buffer, e);
