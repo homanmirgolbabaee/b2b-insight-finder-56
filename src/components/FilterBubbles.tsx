@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { X, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 
 interface FilterBubble {
   id: string;
@@ -74,38 +73,7 @@ export function FilterBubbles({ onFilterSelect, selectedFilters, onFilterRemove,
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      {/* Selected Filters */}
-      {selectedFilters.length > 0 && (
-        <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
-          {selectedFilters.map((filter) => (
-            <Badge
-              key={filter.id}
-              variant="secondary"
-              className="flex items-center gap-1 py-1 px-2 bg-primary/10 text-primary border-primary/20 text-xs animate-fade-in"
-            >
-              {filter.label}
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => onFilterRemove(filter.id)}
-                className="h-3 w-3 p-0 hover:bg-transparent"
-              >
-                <X className="h-2 w-2" />
-              </Button>
-            </Badge>
-          ))}
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={onClearAll}
-            className="text-xs text-text-secondary hover:text-text-primary px-2 py-1 h-auto"
-          >
-            Clear
-          </Button>
-        </div>
-      )}
-
-      {/* Simplified Filter Bubbles */}
+      {/* Simple Filter Bubbles */}
       <div className="flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto relative">
         {currentBubbles.map((bubble, index) => (
           <Button
@@ -114,9 +82,9 @@ export function FilterBubbles({ onFilterSelect, selectedFilters, onFilterRemove,
             variant="outline"
             size="sm"
             className={`
-              relative h-7 px-3 text-xs font-medium rounded-full transition-all duration-300 border-muted-foreground/20
+              h-7 px-3 text-xs font-medium rounded-full transition-all duration-300 border-muted-foreground/20
               ${isSelected(bubble.id) 
-                ? 'bg-primary/5 text-primary border-primary/30 shadow-sm' 
+                ? 'bg-primary text-primary-foreground border-primary' 
                 : 'bg-background hover:bg-muted/50 hover:border-muted-foreground/30'
               }
               animate-fade-in
@@ -130,7 +98,7 @@ export function FilterBubbles({ onFilterSelect, selectedFilters, onFilterRemove,
           </Button>
         ))}
         
-        {/* Refresh button positioned at the end */}
+        {/* Refresh button */}
         <Button
           onClick={handleRefresh}
           disabled={isRefreshing}
