@@ -156,6 +156,32 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+    font-variation-settings: 'opsz' 32;
+  }
+  
+  /* Enhanced typography hierarchy */
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
+    font-variation-settings: 'opsz' 32;
+  }
+  
+  /* Professional spacing utilities */
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .container-max {
+    @apply max-w-7xl mx-auto;
+  }
+  
+  /* Subtle animations for professional feel */
+  .hover-lift {
+    @apply transition-all duration-300 hover:shadow-premium-hover hover:-translate-y-1;
+  }
+  
+  .fade-in {
+    @apply animate-in fade-in duration-500;
   }
 }
