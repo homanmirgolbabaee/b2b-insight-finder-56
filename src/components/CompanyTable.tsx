@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight, ExternalLink, Linkedin, Globe, Newspaper, ArrowUpDown, ChevronUp, Star, Target, TrendingUp, Heart } from "lucide-react";
+import { ChevronDown, ChevronRight, ExternalLink, Linkedin, Globe, Newspaper, ArrowUpDown, ChevronUp, Star, Target, TrendingUp, Heart, FileText } from "lucide-react";
 import { dashboardStore } from "@/stores/dashboardStore";
+import { ReportDialog } from "@/components/ReportDialog";
 import {
   Table,
   TableBody,
@@ -44,6 +45,8 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
     key: keyof Company;
     direction: 'asc' | 'desc';
   } | null>(null);
+  const [reportDialogOpen, setReportDialogOpen] = useState(false);
+  const [selectedCompanyForReport, setSelectedCompanyForReport] = useState<string>("");
 
   const openLink = (url: string) => {
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -346,6 +349,19 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                           size="sm"
                           onClick={(e) => {
                             e.stopPropagation();
+                            setSelectedCompanyForReport(company.name);
+                            setReportDialogOpen(true);
+                          }}
+                          className="h-7 w-7 p-0 hover:bg-neutral-200/50 transition-colors"
+                          title="Generate Report"
+                        >
+                          <FileText className="h-3 w-3 text-neutral-500 hover:text-purple-600" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
                             openLink(company.links.website);
                           }}
                           className="h-7 w-7 p-0 hover:bg-neutral-200/50 transition-colors"
@@ -467,6 +483,12 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
           </TableBody>
         </Table>
       </div>
+      
+      <ReportDialog
+        open={reportDialogOpen}
+        onOpenChange={setReportDialogOpen}
+        companyName={selectedCompanyForReport}
+      />
     </div>
   );
 }
