@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { ToolhouseBranding } from "@/components/ToolhouseBranding";
 import { 
   User, 
   Settings, 
@@ -314,10 +315,21 @@ export const UserDashboard = ({ onClose }: UserDashboardProps) => {
 
             {/* Placeholder for settings tab */}
             {activeTab === "settings" && (
-              <Card className="p-4 lg:p-6 bg-gradient-card shadow-card">
-                <h3 className="text-base lg:text-lg font-semibold text-text-primary mb-4">Settings</h3>
-                <p className="text-text-secondary">Settings panel coming soon...</p>
-              </Card>
+              <div className="space-y-6">
+                <Card className="p-4 lg:p-6 bg-gradient-card shadow-card">
+                  <h3 className="text-base lg:text-lg font-semibold text-text-primary mb-4">Settings</h3>
+                  <p className="text-text-secondary">Settings panel coming soon...</p>
+                </Card>
+                
+                <Card className="p-4 lg:p-6 bg-gradient-card shadow-card">
+                  <h3 className="text-base lg:text-lg font-semibold text-text-primary mb-4">AI Backend</h3>
+                  <ToolhouseBranding variant="inline" />
+                  <p className="text-xs text-text-tertiary mt-3 leading-relaxed">
+                    This platform is powered by Toolhouse AI's advanced agent infrastructure, 
+                    providing enterprise-grade startup intelligence and market research capabilities.
+                  </p>
+                </Card>
+              </div>
             )}
           </div>
         </div>

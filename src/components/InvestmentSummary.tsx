@@ -1,4 +1,4 @@
-import { TrendingUp, DollarSign, Building2, Download, Bookmark, Share2 } from "lucide-react";
+import { TrendingUp, DollarSign, Building2, Download, Bookmark, Share2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Company {
@@ -119,19 +119,37 @@ export function InvestmentSummary({ companies }: InvestmentSummaryProps) {
         )}
       </div>
       
-      <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm" className="h-9 bg-white border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400">
-          <Download className="h-4 w-4 mr-2" />
-          Export Data
-        </Button>
-        <Button variant="outline" size="sm" className="h-9 bg-white border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400">
-          <Bookmark className="h-4 w-4 mr-2" />
-          Save Search
-        </Button>
-        <Button variant="outline" size="sm" className="h-9 bg-white border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400">
-          <Share2 className="h-4 w-4 mr-2" />
-          Share Results
-        </Button>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" size="sm" className="h-9 bg-white border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400">
+            <Download className="h-4 w-4 mr-2" />
+            Export Data
+          </Button>
+          <Button variant="outline" size="sm" className="h-9 bg-white border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400">
+            <Bookmark className="h-4 w-4 mr-2" />
+            Save Search
+          </Button>
+          <Button variant="outline" size="sm" className="h-9 bg-white border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400">
+            <Share2 className="h-4 w-4 mr-2" />
+            Share Results
+          </Button>
+        </div>
+        
+        <div className="flex items-center gap-2 px-3 py-2 bg-gradient-subtle rounded-lg border border-neutral-200/60">
+          <div className="flex items-center gap-1.5">
+            <div className="relative">
+              <Building2 className="h-3 w-3 text-neutral-600" />
+              <Zap className="h-1.5 w-1.5 text-brand-primary absolute -top-0.5 -right-0.5" />
+            </div>
+            <span className="text-xs text-neutral-600 font-medium">AI-Powered by</span>
+          </div>
+          <button
+            onClick={() => window.open("https://toolhouse.ai", "_blank", "noopener,noreferrer")}
+            className="text-xs font-semibold text-brand-primary hover:text-brand-primary/80 transition-colors"
+          >
+            Toolhouse
+          </button>
+        </div>
       </div>
     </div>
   );

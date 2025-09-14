@@ -8,6 +8,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CompanyDetailPanel } from "@/components/CompanyDetailPanel";
 import { InvestmentFilters } from "@/components/InvestmentFilters";
 import { UserDashboard } from "@/components/UserDashboard";
+import { ToolhouseBranding } from "@/components/ToolhouseBranding";
 import { useCompanySearch } from "@/hooks/useCompanySearch";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -92,24 +93,27 @@ const Index = () => {
                 <p className="text-xs sm:text-sm text-text-secondary font-medium hidden sm:block">Professional startup intelligence</p>
               </div>
             </div>
-            <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowDashboard(true)}
-                className="text-text-secondary hover:text-text-primary hover:bg-neutral-100/80 font-medium text-xs sm:text-sm px-2 sm:px-3"
-              >
-                <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Dashboard</span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-text-secondary hover:text-text-primary hover:bg-neutral-100/80 font-medium text-xs sm:text-sm px-2 sm:px-3"
-              >
-                <LogOut className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Sign Out</span>
-              </Button>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <ToolhouseBranding variant="header" />
+              <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowDashboard(true)}
+                  className="text-text-secondary hover:text-text-primary hover:bg-neutral-100/80 font-medium text-xs sm:text-sm px-2 sm:px-3"
+                >
+                  <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Dashboard</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-text-secondary hover:text-text-primary hover:bg-neutral-100/80 font-medium text-xs sm:text-sm px-2 sm:px-3"
+                >
+                  <LogOut className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -225,6 +229,23 @@ const Index = () => {
           )}
         </div>
       </div>
+
+      {/* Professional Footer with Toolhouse Branding */}
+      <footer className="border-t border-neutral-200/60 bg-surface/98 backdrop-blur-md mt-16">
+        <div className="container-max section-padding py-8">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div className="text-center lg:text-left">
+              <p className="text-sm text-text-secondary font-medium">
+                © 2024 Investment Research Platform. Professional startup intelligence.
+              </p>
+              <p className="text-xs text-text-tertiary mt-1">
+                Advanced AI-powered market research and company analysis.
+              </p>
+            </div>
+            <ToolhouseBranding variant="footer" size="md" />
+          </div>
+        </div>
+      </footer>
       
       {/* Company Detail Panel */}
       {selectedCompany && (
