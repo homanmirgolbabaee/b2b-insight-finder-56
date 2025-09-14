@@ -1,33 +1,25 @@
-import { TrendingUp, DollarSign, Target } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export function LoadingSpinner() {
   return (
     <div className="flex justify-center items-center py-20">
       <div className="relative">
-        {/* Professional animated background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/5 via-brand-secondary/5 to-brand-accent/5 rounded-2xl blur-xl animate-pulse"></div>
+        {/* Sophisticated minimal background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/3 to-brand-secondary/3 rounded-xl blur-md"></div>
         
         {/* Main container */}
-        <div className="relative bg-white/80 backdrop-blur-sm border border-neutral-200/50 rounded-2xl p-8 shadow-premium">
-          {/* Animated icons */}
+        <div className="relative bg-white/90 backdrop-blur-sm border border-neutral-200/50 rounded-xl p-8 shadow-premium">
+          {/* Single sophisticated icon */}
           <div className="flex justify-center mb-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-brand-primary/10 rounded-xl animate-bounce" style={{ animationDelay: '0ms' }}>
-                <Target className="h-6 w-6 text-brand-primary" />
-              </div>
-              <div className="p-3 bg-brand-success/10 rounded-xl animate-bounce" style={{ animationDelay: '200ms' }}>
-                <TrendingUp className="h-6 w-6 text-brand-success" />
-              </div>
-              <div className="p-3 bg-brand-accent/10 rounded-xl animate-bounce" style={{ animationDelay: '400ms' }}>
-                <DollarSign className="h-6 w-6 text-brand-accent" />
-              </div>
+            <div className="p-4 bg-brand-primary/5 rounded-full">
+              <Loader2 className="h-8 w-8 text-brand-primary animate-spin" />
             </div>
           </div>
           
-          {/* Progress indicator */}
-          <div className="w-48 mx-auto mb-4">
-            <div className="h-2 bg-neutral-200 rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-brand-primary via-brand-secondary to-brand-accent rounded-full animate-pulse transform translate-x-0 animate-[pulse_2s_ease-in-out_infinite]"></div>
+          {/* Minimal progress indicator */}
+          <div className="w-40 mx-auto mb-4">
+            <div className="h-1 bg-neutral-200 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-brand-primary to-brand-secondary rounded-full animate-pulse"></div>
             </div>
           </div>
           
@@ -37,15 +29,8 @@ export function LoadingSpinner() {
               Analyzing Investment Opportunities
             </h3>
             <p className="text-sm text-neutral-600">
-              Scanning market data and funding insights...
+              Using toolhouse backend...
             </p>
-            
-            {/* Animated dots */}
-            <div className="flex justify-center items-center gap-1 mt-3">
-              <div className="w-2 h-2 bg-brand-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-              <div className="w-2 h-2 bg-brand-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-              <div className="w-2 h-2 bg-brand-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-            </div>
           </div>
         </div>
       </div>

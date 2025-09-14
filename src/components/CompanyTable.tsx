@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight, ExternalLink, Linkedin, Globe, Newspaper, ArrowUpDown, ChevronUp, Star, Target, TrendingUp } from "lucide-react";
+import { ChevronDown, ChevronRight, ExternalLink, Linkedin, Globe, Newspaper, ArrowUpDown, ChevronUp, Star, Target, TrendingUp, Heart } from "lucide-react";
+import { dashboardStore } from "@/stores/dashboardStore";
 import {
   Table,
   TableBody,
@@ -317,15 +318,28 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                     <TableCell className="py-5">
                       <div className="flex items-center gap-1">
                         <Button
-                          variant="outline"
+                          variant={dashboardStore.isCompanySaved(company.name) ? "default" : "outline"}
                           size="sm"
                           onClick={(e) => {
                             e.stopPropagation();
+                            if (dashboardStore.isCompanySaved(company.name)) {
+                              dashboardStore.unsaveCompany(company.name);
+                            } else {
+                              dashboardStore.saveCompany(
+                                company.name, 
+                                company.funding_stage || "Not disclosed", 
+                                company.funding_amount || "Not disclosed"
+                              );
+                            }
                           }}
-                          className="h-7 px-2 text-xs font-medium bg-white border-neutral-300 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all"
+                          className={`h-7 px-2 text-xs font-medium transition-all ${
+                            dashboardStore.isCompanySaved(company.name)
+                              ? "bg-brand-primary text-white border-brand-primary hover:bg-brand-primary/90"
+                              : "bg-white border-neutral-300 hover:bg-brand-primary hover:text-white hover:border-brand-primary"
+                          }`}
                         >
-                          <Star className="h-3 w-3 mr-1" />
-                          Save
+                          <Heart className={`h-3 w-3 mr-1 ${dashboardStore.isCompanySaved(company.name) ? "fill-current" : ""}`} />
+                          {dashboardStore.isCompanySaved(company.name) ? "Saved" : "Save"}
                         </Button>
                         <Button
                           variant="ghost"
