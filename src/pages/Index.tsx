@@ -3,6 +3,7 @@ import { Search, User, LogOut, Building2, TrendingUp, Target } from "lucide-reac
 import { InvestmentSummary } from "@/components/InvestmentSummary";
 import { SearchBar } from "@/components/SearchBar";
 import { SearchCards } from "@/components/SearchCards";
+import { ExampleQueries } from "@/components/ExampleQueries";
 import { CompanyTable } from "@/components/CompanyTable";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CompanyDetailPanel } from "@/components/CompanyDetailPanel";
@@ -185,6 +186,11 @@ const Index = () => {
                 <SearchCards onCardClick={handleCardClick} isLoading={isLoading} />
               </div>
             </Card>
+          )}
+
+          {/* Example Queries Section */}
+          {!isLoading && filteredCompanies.length === 0 && !error && (
+            <ExampleQueries onQuerySelect={handleSearch} />
           )}
 
           {/* Professional results section */}

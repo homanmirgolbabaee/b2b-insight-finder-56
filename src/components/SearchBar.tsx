@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, Grid3X3, ChevronDown, Lightbulb } from "lucide-react";
+import { Search, Grid3X3 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
@@ -16,42 +16,12 @@ interface SearchBarProps {
 
 export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, heroMode = false }: SearchBarProps) {
   const [query, setQuery] = useState("");
-  const [showExamples, setShowExamples] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<FilterBubble[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const searchExamples = [
-    "Search for successful AI companies in recent months in 2025. From May 2025 onwards",
-    "Find fintech startups that raised Series A in 2024",
-    "Companies in healthcare AI with $10M+ funding",
-    "European SaaS companies founded after 2020",
-    "B2B startups in California with 50+ employees",
-    "Climate tech companies with recent partnerships"
-  ];
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setShowExamples(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleExampleClick = (example: string) => {
-    setQuery(example);
-    setShowExamples(false);
-    onSearch(example);
-  };
 
   const handleFilterSelect = (searchTerm: string) => {
-    console.log("handleFilterSelect called with:", searchTerm);
-    
     const bubble = allFilterBubbles.find(b => b.searchTerm === searchTerm);
-    console.log("Found bubble:", bubble);
-    console.log("Current selectedFilters:", selectedFilters);
     
     if (bubble && !selectedFilters.some(f => f.id === bubble.id)) {
       const newFilters = [...selectedFilters, bubble];
@@ -61,9 +31,6 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
       const filterTerms = newFilters.map(f => f.searchTerm);
       const combinedQuery = filterTerms.join(" and ");
       setQuery(combinedQuery);
-      console.log("Updated query to:", combinedQuery);
-    } else {
-      console.log("Bubble not found or already selected");
     }
   };
 
@@ -115,7 +82,6 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
                   placeholder="Search companies, founders, industries..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  onFocus={() => setShowExamples(true)}
                   disabled={isLoading}
                   className="pl-12 pr-20 sm:pr-32 h-12 sm:h-14 text-sm sm:text-base bg-white border-0 rounded-xl focus:ring-0 focus:outline-none placeholder:text-neutral-500"
                 />
@@ -136,39 +102,6 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
               </div>
             </div>
           </form>
-
-          <div className="flex justify-end mt-2">
-            <button
-              type="button"
-              onClick={() => setShowExamples(!showExamples)}
-              className="text-xs font-medium text-text-secondary hover:text-text-primary underline underline-offset-4"
-            >
-              Examples
-            </button>
-          </div>
-          
-          {/* Examples Dropdown */}
-          {showExamples && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-neutral-200 shadow-lg z-[999] max-h-80 overflow-y-auto">
-              <div className="p-3 border-b border-neutral-100 bg-neutral-50 rounded-t-xl">
-                <div className="flex items-center gap-2">
-                  <Lightbulb className="h-4 w-4 text-amber-500" />
-                  <span className="text-sm font-medium text-neutral-700">Search Examples</span>
-                </div>
-              </div>
-              <div className="py-2 bg-white">
-                {searchExamples.map((example, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleExampleClick(example)}
-                    className="w-full text-left px-4 py-3 hover:bg-neutral-50 transition-colors text-sm text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0"
-                  >
-                    {example}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Filter Bubbles for Hero Mode */}
@@ -218,7 +151,6 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
                     placeholder="Search AI startups, fintech, competitors, or any industry..."
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    onFocus={() => setShowExamples(true)}
                     disabled={isLoading}
                     className="pl-20 pr-52 h-20 text-lg bg-transparent border-0 rounded-3xl focus:ring-0 focus:outline-none placeholder:text-neutral-500 font-medium"
                   />
@@ -239,39 +171,6 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
                 </div>
               </div>
             </form>
-
-            <div className="flex justify-end mt-2 pr-2">
-              <button
-                type="button"
-                onClick={() => setShowExamples(!showExamples)}
-                className="text-sm font-medium text-text-secondary hover:text-text-primary underline underline-offset-4"
-              >
-                Examples
-              </button>
-            </div>
-            
-            {/* Examples Dropdown */}
-            {showExamples && (
-              <div className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl border border-neutral-200/60 shadow-premium z-[999] max-h-80 overflow-y-auto">
-                <div className="p-4 border-b border-neutral-100 bg-neutral-50 rounded-t-2xl">
-                  <div className="flex items-center gap-2">
-                    <Lightbulb className="h-5 w-5 text-amber-500" />
-                    <span className="text-base font-semibold text-neutral-800">Search Examples</span>
-                  </div>
-                </div>
-                <div className="py-2 bg-white">
-                  {searchExamples.map((example, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleExampleClick(example)}
-                      className="w-full text-left px-6 py-4 hover:bg-neutral-50 transition-all text-base text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0 font-medium"
-                    >
-                      {example}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {/* Filter Bubbles - positioned below search bar */}
             <FilterBubbles 

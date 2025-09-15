@@ -1,68 +1,49 @@
 export interface FilterBubble {
   id: string;
   label: string;
-  category: string;
   searchTerm: string;
+  category: 'industry' | 'funding' | 'stage' | 'location' | 'size' | 'time';
 }
 
-// Shared filter bubble data
-export const allFilterBubbles: FilterBubble[] = [
-  // Industries
-  { id: "ai", label: "AI", category: "industry", searchTerm: "AI companies" },
-  { id: "fintech", label: "Fintech", category: "industry", searchTerm: "fintech startups" },
-  { id: "healthcare", label: "Healthcare", category: "industry", searchTerm: "healthcare companies" },
-  { id: "saas", label: "SaaS", category: "industry", searchTerm: "SaaS companies" },
-  { id: "enterprise", label: "Enterprise", category: "industry", searchTerm: "enterprise software" },
-  { id: "consumer", label: "Consumer", category: "industry", searchTerm: "consumer companies" },
-  { id: "climate", label: "Climate", category: "industry", searchTerm: "climate tech companies" },
-  { id: "biotech", label: "Biotech", category: "industry", searchTerm: "biotech companies" },
-  
-  // Funding Stages
-  { id: "seed", label: "Seed", category: "funding", searchTerm: "seed stage companies" },
-  { id: "series-a", label: "Series A", category: "funding", searchTerm: "Series A companies" },
-  { id: "series-b", label: "Series B", category: "funding", searchTerm: "Series B companies" },
-  { id: "growth", label: "Growth", category: "funding", searchTerm: "growth stage companies" },
-  
-  // Size
-  { id: "unicorn", label: "Unicorn", category: "size", searchTerm: "unicorn companies" },
-  { id: "profitable", label: "Profitable", category: "size", searchTerm: "profitable companies" },
-  
-  // Location
-  { id: "usa", label: "USA", category: "location", searchTerm: "US companies" },
-  { id: "europe", label: "Europe", category: "location", searchTerm: "European companies" },
-  
-  // Timeline
-  { id: "recent", label: "Recent", category: "timeline", searchTerm: "recently funded" },
-  { id: "ipo", label: "IPO Ready", category: "timeline", searchTerm: "IPO ready companies" },
-];
-
-// Organized sets for the filter bubbles display
+// Updated filter bubbles that align with example queries
 export const filterBubbleSets: FilterBubble[][] = [
+  // Set 1: Industry & Tech Focus
   [
-    // Set 1: Investment Focus
-    allFilterBubbles.find(f => f.id === "ai")!,
-    allFilterBubbles.find(f => f.id === "fintech")!,
-    allFilterBubbles.find(f => f.id === "saas")!,
-    allFilterBubbles.find(f => f.id === "seed")!,
-    allFilterBubbles.find(f => f.id === "series-a")!,
-    allFilterBubbles.find(f => f.id === "growth")!,
+    { id: "ai-1", label: "AI", searchTerm: "AI companies", category: "industry" },
+    { id: "fintech-1", label: "Fintech", searchTerm: "fintech startups", category: "industry" },
+    { id: "healthcare-1", label: "Healthcare", searchTerm: "healthcare", category: "industry" },
+    { id: "saas-1", label: "SaaS", searchTerm: "SaaS companies", category: "industry" },
+    { id: "climate-1", label: "Climate Tech", searchTerm: "climate tech", category: "industry" },
+    { id: "b2b-1", label: "B2B", searchTerm: "B2B startups", category: "industry" }
   ],
+  // Set 2: Funding & Growth
   [
-    // Set 2: Market Segments
-    allFilterBubbles.find(f => f.id === "healthcare")!,
-    allFilterBubbles.find(f => f.id === "enterprise")!,
-    allFilterBubbles.find(f => f.id === "consumer")!,
-    allFilterBubbles.find(f => f.id === "series-b")!,
-    allFilterBubbles.find(f => f.id === "unicorn")!,
-    allFilterBubbles.find(f => f.id === "profitable")!,
+    { id: "series-a-2", label: "Series A", searchTerm: "raised Series A", category: "funding" },
+    { id: "10m-plus-2", label: "$10M+", searchTerm: "with $10M+ funding", category: "funding" },
+    { id: "recent-2", label: "Recent Funding", searchTerm: "recent funding", category: "funding" },
+    { id: "partnerships-2", label: "Partnerships", searchTerm: "recent partnerships", category: "funding" },
+    { id: "successful-2", label: "Successful", searchTerm: "successful", category: "stage" },
+    { id: "growing-2", label: "Growing", searchTerm: "growing companies", category: "stage" }
   ],
+  // Set 3: Location & Size
   [
-    // Set 3: Geography & Timing
-    allFilterBubbles.find(f => f.id === "usa")!,
-    allFilterBubbles.find(f => f.id === "europe")!,
-    allFilterBubbles.find(f => f.id === "climate")!,
-    allFilterBubbles.find(f => f.id === "biotech")!,
-    allFilterBubbles.find(f => f.id === "recent")!,
-    allFilterBubbles.find(f => f.id === "ipo")!,
+    { id: "california-3", label: "California", searchTerm: "in California", category: "location" },
+    { id: "european-3", label: "European", searchTerm: "European", category: "location" },
+    { id: "usa-3", label: "USA", searchTerm: "in USA", category: "location" },
+    { id: "50-plus-3", label: "50+ Employees", searchTerm: "with 50+ employees", category: "size" },
+    { id: "founded-2020-3", label: "Founded 2020+", searchTerm: "founded after 2020", category: "time" },
+    { id: "recent-months-3", label: "Recent Months", searchTerm: "in recent months", category: "time" }
+  ],
+  // Set 4: Specialized Filters
+  [
+    { id: "2025-4", label: "2025", searchTerm: "in 2025", category: "time" },
+    { id: "2024-4", label: "2024", searchTerm: "in 2024", category: "time" },
+    { id: "may-2025-4", label: "May 2025+", searchTerm: "From May 2025 onwards", category: "time" },
+    { id: "startups-4", label: "Startups", searchTerm: "startups", category: "stage" },
+    { id: "companies-4", label: "Companies", searchTerm: "companies", category: "stage" },
+    { id: "unicorns-4", label: "Unicorns", searchTerm: "unicorn companies", category: "stage" }
   ]
 ];
+
+// All filter bubbles for search functionality
+export const allFilterBubbles: FilterBubble[] = filterBubbleSets.flat();
