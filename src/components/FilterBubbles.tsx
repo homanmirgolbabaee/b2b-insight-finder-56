@@ -68,9 +68,9 @@ export function FilterBubbles({ onFilterSelect, selectedFilters, onFilterRemove,
           disabled={isRefreshing}
           variant="ghost"
           size="sm"
-          className="h-5 w-5 p-0 hover:bg-muted/50 transition-all duration-200 ml-2"
+          className="h-6 w-6 p-0 hover:bg-muted/30 transition-all duration-200 ml-2 rounded-full"
         >
-          <RefreshCw className={`h-2.5 w-2.5 transition-all duration-500 ${isRefreshing ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-3 w-3 text-muted-foreground transition-all duration-500 ${isRefreshing ? 'animate-spin' : ''}`} />
         </Button>
       </div>
     </div>

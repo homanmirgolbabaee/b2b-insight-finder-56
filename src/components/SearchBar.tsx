@@ -104,7 +104,7 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
                 {/* Toolhouse logo in the middle */}
                 <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-15 group-focus-within:opacity-8 transition-opacity duration-200">
                   <img 
-                    src="/src/assets/toolhouse-logo.png" 
+                    src="/toolhouse-logo.png" 
                     alt="Toolhouse" 
                     className="h-6 w-auto opacity-60" 
                   />
