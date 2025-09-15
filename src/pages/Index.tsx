@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Search, Building2, TrendingUp, Target, Grid3X3, List } from "lucide-react";
+import { Search, Building2, TrendingUp, Target } from "lucide-react";
 import { InvestmentSummary } from "@/components/InvestmentSummary";
 import { SearchBar } from "@/components/SearchBar";
 import { SearchCards } from "@/components/SearchCards";
 import { ExampleQueries } from "@/components/ExampleQueries";
 import { CompanyList } from "@/components/CompanyList";
 import { SearchLoadingState } from "@/components/SearchLoadingState";
-import { StreamingResults } from "@/components/StreamingResults";
 import { CompanyDetailModal } from "@/components/CompanyDetailModal";
 import { InvestmentFilters } from "@/components/InvestmentFilters";
 import { N8nIntegrationButton } from "@/components/N8nIntegrationButton";
@@ -54,7 +53,6 @@ const Index = () => {
     locations: []
   });
   const [searchQuery, setSearchQuery] = useState("");
-  const [resultsViewMode, setResultsViewMode] = useState<'cards' | 'list'>('list');
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -204,100 +202,39 @@ const Index = () => {
             </div>
           )}
           
-          {/* Results section */}
-          {(filteredCompanies.length > 0 || isLoading) && (
-            <div className="space-y-8 mt-8">
-              {/* Summary card shown only when not loading and has results */}
-              {filteredCompanies.length > 0 && !isLoading && (
-                <Card className="p-6">
-                  <InvestmentSummary companies={filteredCompanies} />
-                </Card>
-              )}
+          {filteredCompanies.length > 0 && !isLoading && (
+            <div className="space-y-8">
+              <Card className="p-6">
+                <InvestmentSummary companies={filteredCompanies} />
+              </Card>
               
-              {/* Results header with view toggle */}
-              {(filteredCompanies.length > 0 || isLoading) && (
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-foreground">
-                    {isLoading ? "Search Results" : `Found ${filteredCompanies.length} companies`}
-                  </h3>
-                  <div className="flex items-center gap-2">
-                    {isLoading && (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <div className="h-2 w-2 bg-primary rounded-full animate-pulse" />
-                        <span>Streaming results...</span>
-                      </div>
-                    )}
-                    {!isLoading && filteredCompanies.length > 0 && (
-                      <div className="inline-flex items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground">
-                        <button
-                          onClick={() => setResultsViewMode('list')}
-                          className={`inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${
-                            resultsViewMode === 'list' 
-                              ? 'bg-background text-foreground shadow-sm' 
-                              : 'hover:bg-background/60 hover:text-foreground'
-                          }`}
-                        >
-                          <List className="h-4 w-4 mr-1" />
-                          List
-                        </button>
-                        <button
-                          onClick={() => setResultsViewMode('cards')}
-                          className={`inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${
-                            resultsViewMode === 'cards' 
-                              ? 'bg-background text-foreground shadow-sm' 
-                              : 'hover:bg-background/60 hover:text-foreground'
-                          }`}
-                        >
-                          <Grid3X3 className="h-4 w-4 mr-1" />
-                          Cards
-                        </button>
-                      </div>
-                    )}
-                  </div>
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+                <div className="order-2 lg:order-1">
+                  <Card className="p-6 sticky top-24">
+                    <InvestmentFilters 
+                      activeFilters={activeFilters}
+                      onFiltersChange={setActiveFilters}
+                    />
+                  </Card>
                 </div>
-              )}
-              
-              {/* Live streaming results in card mode */}
-              {resultsViewMode === 'cards' && (
-                <StreamingResults 
-                  companies={filteredCompanies}
-                  isLoading={isLoading}
-                />
-              )}
-              
-              {/* List view results */}
-              {resultsViewMode === 'list' && (filteredCompanies.length > 0 || isLoading) && (
-                <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
-                  <div className="order-2 lg:order-1">
-                    {!isLoading && filteredCompanies.length > 0 && (
-                      <Card className="p-6 sticky top-24">
-                        <InvestmentFilters 
-                          activeFilters={activeFilters}
-                          onFiltersChange={setActiveFilters}
-                        />
-                      </Card>
-                    )}
-                  </div>
-                  
-                  <div className="order-1 lg:order-2 lg:col-span-3">
-                    <div className="space-y-4">
-                      {isLoading && filteredCompanies.length === 0 ? (
-                        <div className="text-center py-8 text-muted-foreground">
-                          <div className="flex items-center justify-center gap-2 mb-2">
-                            <div className="h-2 w-2 bg-primary rounded-full animate-pulse" />
-                            <span>Loading companies...</span>
-                          </div>
-                        </div>
-                      ) : (
-                        <CompanyList 
-                          companies={filteredCompanies}
-                          onCompanyClick={handleCompanyClick}
-                        />
-                      )}
+                
+                <div className="order-1 lg:order-2 lg:col-span-3">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-lg font-semibold text-foreground">
+                        Search Results
+                      </h2>
+                      <div className="text-sm text-muted-foreground">
+                        {filteredCompanies.length} companies
+                      </div>
                     </div>
+                    <CompanyList 
+                      companies={filteredCompanies}
+                      onCompanyClick={handleCompanyClick}
+                    />
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           )}
         </div>
