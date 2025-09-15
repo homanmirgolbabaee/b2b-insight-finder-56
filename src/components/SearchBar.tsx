@@ -120,16 +120,9 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
                   className="pl-12 pr-20 sm:pr-32 h-12 sm:h-14 text-sm sm:text-base bg-white border-0 rounded-xl focus:ring-0 focus:outline-none placeholder:text-neutral-500"
                 />
                 <Button
-                  type="button"
-                  onClick={() => setShowExamples(!showExamples)}
-                  className="absolute right-12 sm:right-16 top-1/2 transform -translate-y-1/2 h-6 w-6 sm:h-8 sm:w-8 p-0 bg-transparent hover:bg-neutral-100 text-neutral-500 hover:text-neutral-700 transition-colors"
-                >
-                  <ChevronDown className={`h-3 w-3 sm:h-4 sm:w-4 transition-transform ${showExamples ? 'rotate-180' : ''}`} />
-                </Button>
-                <Button
                   type="submit"
                   disabled={isLoading || !query.trim()}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 sm:h-10 px-2 sm:px-4 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium text-xs sm:text-sm"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 sm:h-10 px-2 sm:px-4 bg-gradient-primary text-white rounded-lg shadow-glow hover:shadow-premium-hover disabled:opacity-50 disabled:cursor-not-allowed transition-premium font-medium text-xs sm:text-sm"
                 >
                   {isLoading ? (
                     <div className="flex items-center gap-1 sm:gap-2">
@@ -143,22 +136,32 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
               </div>
             </div>
           </form>
+
+          <div className="flex justify-end mt-2">
+            <button
+              type="button"
+              onClick={() => setShowExamples(!showExamples)}
+              className="text-xs font-medium text-text-secondary hover:text-text-primary underline underline-offset-4"
+            >
+              Examples
+            </button>
+          </div>
           
           {/* Examples Dropdown */}
           {showExamples && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-neutral-200 shadow-lg z-[999] max-h-80 overflow-y-auto backdrop-blur-sm">
-              <div className="p-3 border-b border-neutral-100 bg-neutral-50/95 rounded-t-xl backdrop-blur-sm">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-neutral-200 shadow-lg z-[999] max-h-80 overflow-y-auto">
+              <div className="p-3 border-b border-neutral-100 bg-neutral-50 rounded-t-xl">
                 <div className="flex items-center gap-2">
                   <Lightbulb className="h-4 w-4 text-amber-500" />
                   <span className="text-sm font-medium text-neutral-700">Search Examples</span>
                 </div>
               </div>
-              <div className="py-2 bg-white/95 backdrop-blur-sm">
+              <div className="py-2 bg-white">
                 {searchExamples.map((example, index) => (
                   <button
                     key={index}
                     onClick={() => handleExampleClick(example)}
-                    className="w-full text-left px-4 py-3 hover:bg-neutral-50/80 transition-colors text-sm text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0"
+                    className="w-full text-left px-4 py-3 hover:bg-neutral-50 transition-colors text-sm text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0"
                   >
                     {example}
                   </button>
@@ -220,13 +223,6 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
                     className="pl-20 pr-52 h-20 text-lg bg-transparent border-0 rounded-3xl focus:ring-0 focus:outline-none placeholder:text-neutral-500 font-medium"
                   />
                   <Button
-                    type="button"
-                    onClick={() => setShowExamples(!showExamples)}
-                    className="absolute right-44 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 bg-white/10 hover:bg-white/20 text-neutral-600 hover:text-brand-primary rounded-xl transition-all"
-                  >
-                    <ChevronDown className={`h-5 w-5 transition-transform ${showExamples ? 'rotate-180' : ''}`} />
-                  </Button>
-                  <Button
                     type="submit"
                     disabled={isLoading || !query.trim()}
                     className="absolute right-4 top-1/2 transform -translate-y-1/2 h-12 px-8 bg-gradient-primary text-white rounded-2xl shadow-glow hover:shadow-premium-hover disabled:opacity-50 disabled:cursor-not-allowed transition-premium font-semibold"
@@ -243,22 +239,32 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
                 </div>
               </div>
             </form>
+
+            <div className="flex justify-end mt-2 pr-2">
+              <button
+                type="button"
+                onClick={() => setShowExamples(!showExamples)}
+                className="text-sm font-medium text-text-secondary hover:text-text-primary underline underline-offset-4"
+              >
+                Examples
+              </button>
+            </div>
             
             {/* Examples Dropdown */}
             {showExamples && (
-              <div className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl border border-neutral-200/60 shadow-premium z-[999] max-h-80 overflow-y-auto backdrop-blur-sm">
-                <div className="p-4 border-b border-neutral-100 bg-neutral-50/95 rounded-t-2xl backdrop-blur-sm">
+              <div className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl border border-neutral-200/60 shadow-premium z-[999] max-h-80 overflow-y-auto">
+                <div className="p-4 border-b border-neutral-100 bg-neutral-50 rounded-t-2xl">
                   <div className="flex items-center gap-2">
                     <Lightbulb className="h-5 w-5 text-amber-500" />
                     <span className="text-base font-semibold text-neutral-800">Search Examples</span>
                   </div>
                 </div>
-                <div className="py-2 bg-white/95 backdrop-blur-sm">
+                <div className="py-2 bg-white">
                   {searchExamples.map((example, index) => (
                     <button
                       key={index}
                       onClick={() => handleExampleClick(example)}
-                      className="w-full text-left px-6 py-4 hover:bg-neutral-50/80 transition-all text-base text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0 font-medium"
+                      className="w-full text-left px-6 py-4 hover:bg-neutral-50 transition-all text-base text-neutral-700 hover:text-neutral-900 border-b border-neutral-50 last:border-b-0 font-medium"
                     >
                       {example}
                     </button>

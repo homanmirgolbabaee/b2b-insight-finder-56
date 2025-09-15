@@ -85,7 +85,7 @@ const Index = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-4 min-w-0">
               <img 
-                src="/src/assets/toolhouse-logo.png" 
+                src="/toolhouse-logo.png" 
                 alt="Toolhouse" 
                 className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0" 
               />
