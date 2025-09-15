@@ -4,9 +4,9 @@ import { InvestmentSummary } from "@/components/InvestmentSummary";
 import { SearchBar } from "@/components/SearchBar";
 import { SearchCards } from "@/components/SearchCards";
 import { ExampleQueries } from "@/components/ExampleQueries";
-import { CompanyList } from "@/components/CompanyList";
+import { CompanyTable } from "@/components/CompanyTable";
 import { SearchLoadingState } from "@/components/SearchLoadingState";
-import { CompanyDetailModal } from "@/components/CompanyDetailModal";
+import { CompanyDetailPanel } from "@/components/CompanyDetailPanel";
 import { InvestmentFilters } from "@/components/InvestmentFilters";
 import { N8nIntegrationButton } from "@/components/N8nIntegrationButton";
 import { useCompanySearch } from "@/hooks/useCompanySearch";
@@ -26,7 +26,6 @@ interface Company {
   location: string;
   last_updated: string;
   investors: string[];
-  logo: string;
   links: {
     news?: string | null;
     linkedin: string;
@@ -45,7 +44,6 @@ const Index = () => {
   const { companies, isLoading, error, search } = useCompanySearch();
   const [showCardMode, setShowCardMode] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
     fundingStages: [],
     fundingRanges: [],
@@ -66,7 +64,6 @@ const Index = () => {
 
   const handleCompanyClick = (company: Company) => {
     setSelectedCompany(company);
-    setIsModalOpen(true);
   };
 
   const filteredCompanies = companies; // TODO: Implement actual filtering based on activeFilters
@@ -171,7 +168,7 @@ const Index = () => {
           )}
 
           {/* Results section */}
-          {isLoading && <SearchLoadingState searchQuery={searchQuery} isLoading={isLoading} />}
+          {isLoading && <SearchLoadingState searchQuery={searchQuery} />}
           
           {error && (
             <div className="mx-auto max-w-md">
@@ -198,10 +195,12 @@ const Index = () => {
                 </div>
                 
                 <div className="order-1 lg:order-2 lg:col-span-3">
-                  <CompanyList 
-                    companies={filteredCompanies}
-                    onCompanyClick={handleCompanyClick}
-                  />
+                  <Card className="overflow-hidden">
+                    <CompanyTable 
+                      companies={filteredCompanies}
+                      onCompanyClick={handleCompanyClick}
+                    />
+                  </Card>
                 </div>
               </div>
             </div>
@@ -218,16 +217,14 @@ const Index = () => {
         </div>
       </footer>
       
-      {/* Company Detail Modal */}
-      <CompanyDetailModal
-        company={selectedCompany}
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setSelectedCompany(null);
-        }}
-        similarCompanies={selectedCompany ? getSimilarCompanies(selectedCompany) : []}
-      />
+      {/* Company Detail Panel */}
+      {selectedCompany && (
+        <CompanyDetailPanel
+          company={selectedCompany}
+          onClose={() => setSelectedCompany(null)}
+          similarCompanies={getSimilarCompanies(selectedCompany)}
+        />
+      )}
     </div>
   );
 };
