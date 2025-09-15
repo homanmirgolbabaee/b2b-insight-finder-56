@@ -130,8 +130,8 @@ export function useCompanySearch() {
     } catch (err) {
       console.error('Stream processing error:', err);
       const duration = Date.now() - searchStartTimeRef.current;
-      if (duration > 60000) { // More than 1 minute
-        setError('Search is taking longer than expected. This happens with complex queries. Please try a more specific search or try again later.');
+      if (duration > 300000) { // More than 5 minutes
+        setError('Search is taking longer than expected. This happens with very complex queries. Please try a more specific search or try again later.');
       } else if (err instanceof Error && err.name === 'AbortError') {
         setError('Search was cancelled. Please try again.');
       } else {
@@ -162,11 +162,11 @@ export function useCompanySearch() {
     try {
       let response: Response;
       
-      // Create an AbortController with a longer timeout for complex searches
+      // Create an AbortController with a very long timeout for complex searches
       const controller = new AbortController();
       const timeoutId = setTimeout(() => {
         controller.abort();
-      }, 120000); // 2 minutes timeout
+      }, 600000); // 10 minutes timeout
       
       if (runIdRef.current) {
         // Subsequent search - use PUT with runId
@@ -227,8 +227,8 @@ export function useCompanySearch() {
           setError('Network connection issue. Please check your internet connection and try again.');
         } else if (err.message.includes('timeout')) {
           setError('Search timed out. Please try a more specific query or try again later.');
-        } else if (duration > 30000) { // More than 30 seconds
-          setError('Search is taking longer than expected. Complex queries may take a few minutes to complete.');
+        } else if (duration > 300000) { // More than 5 minutes
+          setError('Search is taking longer than expected. Complex queries may take up to 10 minutes to complete.');
         } else {
           setError(`Search failed: ${err.message}`);
         }

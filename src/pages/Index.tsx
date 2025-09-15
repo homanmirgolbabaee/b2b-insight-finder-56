@@ -6,6 +6,7 @@ import { SearchCards } from "@/components/SearchCards";
 import { ExampleQueries } from "@/components/ExampleQueries";
 import { CompanyList } from "@/components/CompanyList";
 import { SearchLoadingState } from "@/components/SearchLoadingState";
+import { StreamingResults } from "@/components/StreamingResults";
 import { CompanyDetailModal } from "@/components/CompanyDetailModal";
 import { InvestmentFilters } from "@/components/InvestmentFilters";
 import { N8nIntegrationButton } from "@/components/N8nIntegrationButton";
@@ -202,8 +203,14 @@ const Index = () => {
             </div>
           )}
           
+          {/* Live streaming results */}
+          <StreamingResults 
+            companies={filteredCompanies}
+            isLoading={isLoading}
+          />
+          
           {filteredCompanies.length > 0 && !isLoading && (
-            <div className="space-y-8">
+            <div className="space-y-8 mt-8">
               <Card className="p-6">
                 <InvestmentSummary companies={filteredCompanies} />
               </Card>
@@ -220,14 +227,6 @@ const Index = () => {
                 
                 <div className="order-1 lg:order-2 lg:col-span-3">
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-lg font-semibold text-foreground">
-                        Search Results
-                      </h2>
-                      <div className="text-sm text-muted-foreground">
-                        {filteredCompanies.length} companies
-                      </div>
-                    </div>
                     <CompanyList 
                       companies={filteredCompanies}
                       onCompanyClick={handleCompanyClick}

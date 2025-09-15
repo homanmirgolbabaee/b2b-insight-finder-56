@@ -147,9 +147,15 @@ export function SearchLoadingState({ searchQuery, isLoading }: SearchLoadingStat
             </span>
           </div>
           
-          {elapsedTime > 45 && (
+          {elapsedTime > 60 && (
             <div className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-md p-2 mb-2">
-              Complex searches may take up to 2 minutes. Please wait...
+              Complex searches may take up to 10 minutes. Please wait...
+            </div>
+          )}
+          
+          {elapsedTime > 180 && (
+            <div className="text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded-md p-2 mb-2">
+              Large search in progress. The system is processing extensive data sources...
             </div>
           )}
           
