@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "instanceId": "toolhouse-workflow"
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "toolhouse-agent-node",
+      "name": "Toolhouse AI Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "toolhouse-api",
+          "name": "Toolhouse API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "=Welcome to Toolhouse AI Agent integration!\n\nThis workflow connects your n8n automation to Toolhouse's powerful AI-driven startup intelligence platform.\n\nTo get started:\n1. Configure your Toolhouse API credentials\n2. Set up your search parameters\n3. Process the startup data in your automation\n\nFor full documentation, visit: https://toolhouse.ai/docs",
+        "options": {}
+      },
+      "id": "welcome-message",
+      "name": "Welcome Message",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 300]
+    }
+  ],
+  "connections": {
+    "Toolhouse AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Welcome Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2024-01-01T00:00:00.000Z",
+  "versionId": "1"
+}

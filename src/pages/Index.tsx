@@ -9,6 +9,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CompanyDetailPanel } from "@/components/CompanyDetailPanel";
 import { InvestmentFilters } from "@/components/InvestmentFilters";
 import { UserDashboard } from "@/components/UserDashboard";
+import { N8nIntegrationButton } from "@/components/N8nIntegrationButton";
 import { useCompanySearch } from "@/hooks/useCompanySearch";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -96,6 +97,7 @@ const Index = () => {
               </div>
             </div>
             <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+              <N8nIntegrationButton />
               <Button
                 variant="ghost"
                 size="sm"
