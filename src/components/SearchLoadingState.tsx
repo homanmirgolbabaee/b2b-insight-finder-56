@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Cpu, Search as SearchIcon, Globe, CheckCircle, Activity } from "lucide-react";
+import { Search, Database, Globe, Sparkles, CheckCircle, Brain } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
@@ -13,174 +13,203 @@ interface SearchStage {
 
 const searchStages: SearchStage[] = [
   {
-    id: "agent",
-    label: "Calling Toolhouse Agent",
-    description: "Initializing AI-powered search infrastructure",
-    icon: <Cpu className="h-4 w-4" />,
-    duration: 1200
+    id: "initialize",
+    label: "Initializing search",
+    description: "Connecting to Toolhouse AI agents",
+    icon: <Brain className="h-5 w-5" />,
+    duration: 1500
   },
   {
-    id: "exa",
-    label: "Using Exa MCP Servers",
-    description: "Accessing specialized data sources and APIs",
-    icon: <Activity className="h-4 w-4" />,
-    duration: 1800
+    id: "sources",
+    label: "Scanning data sources",
+    description: "Accessing startup databases and funding records",
+    icon: <Database className="h-5 w-5" />,
+    duration: 2000
   },
   {
     id: "web",
-    label: "Searching the Web",
-    description: "Crawling latest startup data and funding news",
-    icon: <Globe className="h-4 w-4" />,
-    duration: 2200
+    label: "Searching the web",
+    description: "Finding latest news and updates",
+    icon: <Globe className="h-5 w-5" />,
+    duration: 2500
   },
   {
-    id: "crawling",
-    label: "Crawling Sources",
-    description: "Processing structured and unstructured data",
-    icon: <SearchIcon className="h-4 w-4" />,
-    duration: 1600
-  },
-  {
-    id: "drafting",
-    label: "Drafting Response",
-    description: "Analyzing and formatting results",
-    icon: <CheckCircle className="h-4 w-4" />,
-    duration: 1400
+    id: "analyze",
+    label: "Analyzing results",
+    description: "Processing and ranking companies",
+    icon: <Sparkles className="h-5 w-5" />,
+    duration: 1500
   }
 ];
 
 interface SearchLoadingStateProps {
   searchQuery?: string;
-  isLoading: boolean;
 }
 
-export function SearchLoadingState({ searchQuery, isLoading }: SearchLoadingStateProps) {
+export function SearchLoadingState({ searchQuery }: SearchLoadingStateProps) {
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [completedStages, setCompletedStages] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    if (!isLoading) {
-      // Reset everything when not loading
-      setCurrentStageIndex(0);
-      setProgress(0);
-      setCompletedStages(new Set());
-      return;
-    }
-
-    // Start from the beginning when loading starts
-    setCurrentStageIndex(0);
-    setProgress(0);
-    setCompletedStages(new Set());
-
-    let startTime = Date.now();
-    let stageIndex = 0;
-    let cumulativeTime = 0;
-
+    const totalDuration = searchStages.reduce((sum, stage) => sum + stage.duration, 0);
+    let elapsed = 0;
+    
     const progressTimer = setInterval(() => {
-      if (!isLoading) return;
-      
-      const elapsed = Date.now() - startTime;
-      const totalDuration = searchStages.reduce((sum, stage) => sum + stage.duration, 0);
+      elapsed += 100;
       const newProgress = Math.min((elapsed / totalDuration) * 100, 100);
       setProgress(newProgress);
-
-      // Update stage based on elapsed time
-      let newCumulativeTime = 0;
-      for (let i = 0; i < searchStages.length; i++) {
-        newCumulativeTime += searchStages[i].duration;
-        if (elapsed >= newCumulativeTime && i > stageIndex) {
-          setCompletedStages(prev => {
-            const newSet = new Set(prev);
-            for (let j = 0; j <= i - 1; j++) {
-              newSet.add(searchStages[j].id);
-            }
-            return newSet;
-          });
-          stageIndex = i;
-          setCurrentStageIndex(i);
-        }
-      }
     }, 100);
+
+    const stageTimer = setInterval(() => {
+      if (currentStageIndex < searchStages.length - 1) {
+        setCompletedStages(prev => new Set([...prev, searchStages[currentStageIndex].id]));
+        setCurrentStageIndex(prev => prev + 1);
+      }
+    }, searchStages[currentStageIndex]?.duration || 2000);
 
     return () => {
       clearInterval(progressTimer);
+      clearInterval(stageTimer);
     };
-  }, [isLoading]);
+  }, [currentStageIndex]);
 
   const currentStage = searchStages[currentStageIndex];
 
   return (
-    <div className="w-full max-w-lg mx-auto">
+    <div className="w-full max-w-2xl mx-auto space-y-8">
       {/* Search Query Display */}
       {searchQuery && (
-        <Card className="p-4 mb-6 border border-border/50">
+        <Card className="p-6 border-l-4 border-l-primary">
           <div className="flex items-center gap-3">
-            <SearchIcon className="h-4 w-4 text-muted-foreground" />
+            <Search className="h-5 w-5 text-primary" />
             <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Query</p>
-              <p className="text-sm font-medium text-foreground">{searchQuery}</p>
+              <p className="text-sm text-muted-foreground">Searching for</p>
+              <p className="font-medium text-foreground">{searchQuery}</p>
             </div>
           </div>
         </Card>
       )}
 
-      {/* Search Progress */}
+      {/* Progress Overview */}
       <Card className="p-6">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Processing</h3>
-            <span className="text-xs text-muted-foreground font-mono">
+            <h3 className="text-lg font-semibold">Finding startups...</h3>
+            <span className="text-sm text-muted-foreground">
               {Math.round(progress)}%
             </span>
           </div>
           
-          <Progress value={progress} className="h-1" />
+          <Progress value={progress} className="h-2" />
+          
+          {/* Current Stage */}
+          <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              {currentStage.icon}
+            </div>
+            <div className="flex-1">
+              <p className="font-medium">{currentStage.label}</p>
+              <p className="text-sm text-muted-foreground">{currentStage.description}</p>
+            </div>
+            <div className="flex h-6 w-6 items-center justify-center">
+              <div className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+            </div>
+          </div>
         </div>
+      </Card>
 
-        <div className="space-y-2 mt-6">
+      {/* Stage Progress */}
+      <Card className="p-6">
+        <h4 className="font-medium mb-4">Search Progress</h4>
+        <div className="space-y-3">
           {searchStages.map((stage, index) => {
             const isCompleted = completedStages.has(stage.id);
             const isCurrent = index === currentStageIndex;
+            const isPending = index > currentStageIndex;
 
             return (
               <div
                 key={stage.id}
-                className={`flex items-center gap-3 p-2 rounded-md transition-all duration-200 ${
+                className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-300 ${
                   isCurrent 
-                    ? 'bg-muted/50' 
+                    ? 'bg-primary/10 border border-primary/20' 
                     : isCompleted 
-                    ? 'opacity-60' 
-                    : 'opacity-30'
+                    ? 'bg-green-50 border border-green-200' 
+                    : 'bg-muted/30'
                 }`}
               >
-                <div className={`flex h-6 w-6 items-center justify-center rounded-full transition-all duration-200 ${
+                <div className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 ${
                   isCompleted 
-                    ? 'bg-green-100 text-green-600' 
+                    ? 'bg-green-500 text-white' 
                     : isCurrent 
-                    ? 'bg-primary/10 text-primary' 
+                    ? 'bg-primary text-primary-foreground animate-pulse' 
                     : 'bg-muted text-muted-foreground'
                 }`}>
-                  {isCompleted ? <CheckCircle className="h-3 w-3" /> : stage.icon}
+                  {isCompleted ? <CheckCircle className="h-4 w-4" /> : stage.icon}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className={`text-xs font-medium ${
-                    isCompleted ? 'text-green-700' : isCurrent ? 'text-foreground' : 'text-muted-foreground'
+                <div className="flex-1">
+                  <p className={`text-sm font-medium ${
+                    isCompleted ? 'text-green-700' : isCurrent ? 'text-primary' : 'text-muted-foreground'
                   }`}>
                     {stage.label}
                   </p>
-                  <p className="text-xs text-muted-foreground truncate">{stage.description}</p>
+                  <p className="text-xs text-muted-foreground">{stage.description}</p>
                 </div>
                 {isCurrent && (
-                  <div className="flex space-x-0.5">
-                    <div className="h-1 w-1 animate-pulse rounded-full bg-primary" />
-                    <div className="h-1 w-1 animate-pulse rounded-full bg-primary [animation-delay:0.2s]" />
-                    <div className="h-1 w-1 animate-pulse rounded-full bg-primary [animation-delay:0.4s]" />
+                  <div className="flex space-x-1">
+                    <div className="h-1 w-1 animate-bounce rounded-full bg-primary [animation-delay:-0.3s]" />
+                    <div className="h-1 w-1 animate-bounce rounded-full bg-primary [animation-delay:-0.15s]" />
+                    <div className="h-1 w-1 animate-bounce rounded-full bg-primary" />
                   </div>
                 )}
               </div>
             );
           })}
+        </div>
+      </Card>
+
+      {/* Results Preview Skeleton */}
+      <Card className="p-6">
+        <h4 className="font-medium mb-4">Preparing Results</h4>
+        <div className="space-y-4">
+          {/* Summary skeleton */}
+          <div className="grid grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="space-y-2">
+                <div className="h-4 bg-muted animate-pulse rounded" />
+                <div className="h-8 bg-muted animate-pulse rounded" />
+              </div>
+            ))}
+          </div>
+          
+          {/* Table skeleton */}
+          <div className="space-y-3 mt-6">
+            <div className="h-4 bg-muted animate-pulse rounded w-1/4" />
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="flex items-center space-x-4 p-3 border rounded-lg">
+                <div className="h-10 w-10 bg-muted animate-pulse rounded-full" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 bg-muted animate-pulse rounded w-3/4" />
+                  <div className="h-3 bg-muted animate-pulse rounded w-1/2" />
+                </div>
+                <div className="h-6 w-16 bg-muted animate-pulse rounded" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </Card>
+
+      {/* Helpful Tips */}
+      <Card className="p-6 border-l-4 border-l-blue-500">
+        <div className="flex items-start gap-3">
+          <Sparkles className="h-5 w-5 text-blue-500 mt-0.5" />
+          <div>
+            <p className="font-medium text-blue-900">Pro Tip</p>
+            <p className="text-sm text-blue-700">
+              While we search, try refining your query with specific criteria like funding stage, location, or industry to get more targeted results.
+            </p>
+          </div>
         </div>
       </Card>
     </div>
