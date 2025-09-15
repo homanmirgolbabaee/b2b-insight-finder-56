@@ -51,35 +51,62 @@ const searchStages: SearchStage[] = [
 
 interface SearchLoadingStateProps {
   searchQuery?: string;
+  isLoading: boolean;
 }
 
-export function SearchLoadingState({ searchQuery }: SearchLoadingStateProps) {
+export function SearchLoadingState({ searchQuery, isLoading }: SearchLoadingStateProps) {
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [completedStages, setCompletedStages] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    const totalDuration = searchStages.reduce((sum, stage) => sum + stage.duration, 0);
-    let elapsed = 0;
-    
+    if (!isLoading) {
+      // Reset everything when not loading
+      setCurrentStageIndex(0);
+      setProgress(0);
+      setCompletedStages(new Set());
+      return;
+    }
+
+    // Start from the beginning when loading starts
+    setCurrentStageIndex(0);
+    setProgress(0);
+    setCompletedStages(new Set());
+
+    let startTime = Date.now();
+    let stageIndex = 0;
+    let cumulativeTime = 0;
+
     const progressTimer = setInterval(() => {
-      elapsed += 100;
+      if (!isLoading) return;
+      
+      const elapsed = Date.now() - startTime;
+      const totalDuration = searchStages.reduce((sum, stage) => sum + stage.duration, 0);
       const newProgress = Math.min((elapsed / totalDuration) * 100, 100);
       setProgress(newProgress);
-    }, 100);
 
-    const stageTimer = setInterval(() => {
-      if (currentStageIndex < searchStages.length - 1) {
-        setCompletedStages(prev => new Set([...prev, searchStages[currentStageIndex].id]));
-        setCurrentStageIndex(prev => prev + 1);
+      // Update stage based on elapsed time
+      let newCumulativeTime = 0;
+      for (let i = 0; i < searchStages.length; i++) {
+        newCumulativeTime += searchStages[i].duration;
+        if (elapsed >= newCumulativeTime && i > stageIndex) {
+          setCompletedStages(prev => {
+            const newSet = new Set(prev);
+            for (let j = 0; j <= i - 1; j++) {
+              newSet.add(searchStages[j].id);
+            }
+            return newSet;
+          });
+          stageIndex = i;
+          setCurrentStageIndex(i);
+        }
       }
-    }, searchStages[currentStageIndex]?.duration || 2000);
+    }, 100);
 
     return () => {
       clearInterval(progressTimer);
-      clearInterval(stageTimer);
     };
-  }, [currentStageIndex]);
+  }, [isLoading]);
 
   const currentStage = searchStages[currentStageIndex];
 
