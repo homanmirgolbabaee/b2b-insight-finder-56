@@ -74,22 +74,22 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-hero">
-      {/* Professional header with user navigation */}
-      <header className="border-b border-neutral-300/40 bg-surface/98 backdrop-blur-md sticky top-0 z-50">
-        <div className="container-max section-padding py-3 sm:py-5">
+      {/* Modern header with enhanced styling */}
+      <header className="border-b bg-background/95 backdrop-blur-sm sticky top-0 z-50 shadow-card">
+        <div className="container-max section-padding py-4 sm:py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <img 
                 src="/toolhouse-logo.png" 
                 alt="Toolhouse" 
-                className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0" 
+                className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0" 
               />
               <div className="min-w-0">
-                <h1 className="text-base sm:text-lg lg:text-xl font-bold text-text-primary tracking-tight truncate">Toolhouse.ai</h1>
-                <p className="text-xs sm:text-sm text-text-secondary font-medium hidden sm:block">AI-powered startup intelligence</p>
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground tracking-tight truncate">Toolhouse.ai</h1>
+                <p className="text-xs sm:text-sm text-muted-foreground font-medium hidden sm:block">AI-powered startup intelligence</p>
               </div>
             </div>
-            <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
               <N8nIntegrationButton />
             </div>
           </div>
@@ -99,26 +99,26 @@ const Index = () => {
       {/* Main search interface */}
       <div className="container-max section-padding py-8 sm:py-12 lg:py-16">
         <div className="space-y-6 sm:space-y-8 lg:space-y-10">
-          {/* Professional search modes */}
+          {/* Modern search mode selector */}
           <div className="flex justify-center fade-in">
-            <div className="bg-surface/90 backdrop-blur-sm rounded-xl p-1 sm:p-1.5 shadow-premium border border-neutral-300/50">
-              <div className="flex gap-0.5 sm:gap-1">
+            <div className="bg-card/90 backdrop-blur-sm rounded-xl p-1 sm:p-1.5 shadow-premium border">
+              <div className="flex gap-1">
                 <button
                   onClick={() => setShowCardMode(false)}
-                  className={`px-4 sm:px-6 lg:px-8 py-2 sm:py-3 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-300 ${
+                  className={`px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${
                     !showCardMode 
-                      ? 'bg-gradient-primary text-white shadow-glow' 
-                      : 'text-text-secondary hover:text-text-primary hover:bg-neutral-100/60'
+                      ? 'bg-primary text-primary-foreground shadow-card' 
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                   }`}
                 >
                   Custom Search
                 </button>
                 <button
                   onClick={() => setShowCardMode(true)}
-                  className={`px-4 sm:px-6 lg:px-8 py-2 sm:py-3 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-300 ${
+                  className={`px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${
                     showCardMode 
-                      ? 'bg-gradient-primary text-white shadow-glow' 
-                      : 'text-text-secondary hover:text-text-primary hover:bg-neutral-100/60'
+                      ? 'bg-primary text-primary-foreground shadow-card' 
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                   }`}
                 >
                   Quick Research
@@ -127,15 +127,15 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Professional search interface */}
+          {/* Modern search interface */}
           {!showCardMode ? (
-            <Card className="max-w-4xl mx-auto p-6 sm:p-8 lg:p-10 bg-gradient-card shadow-premium hover-lift border-0">
-              <div className="space-y-6 sm:space-y-8">
-                <div className="text-center space-y-3 sm:space-y-4">
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-text-primary tracking-tight">
+            <Card className="max-w-4xl mx-auto p-8 sm:p-10 lg:p-12 shadow-premium hover-lift">
+              <div className="space-y-8 sm:space-y-10">
+                <div className="text-center space-y-4 sm:space-y-6">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight">
                     Discover Startups with AI
                   </h2>
-                  <p className="text-sm sm:text-base lg:text-lg text-text-secondary font-medium max-w-2xl mx-auto px-4">
+                  <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">
                     Find companies, analyze funding, and explore markets with intelligent search
                   </p>
                 </div>
@@ -150,13 +150,13 @@ const Index = () => {
               </div>
             </Card>
           ) : (
-            <Card className="max-w-6xl mx-auto p-6 sm:p-8 lg:p-10 bg-gradient-card shadow-premium hover-lift border-0">
-              <div className="space-y-6 sm:space-y-8">
-                <div className="text-center space-y-3 sm:space-y-4">
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-text-primary tracking-tight">
+            <Card className="max-w-6xl mx-auto p-8 sm:p-10 lg:p-12 shadow-premium hover-lift">
+              <div className="space-y-8 sm:space-y-10">
+                <div className="text-center space-y-4 sm:space-y-6">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight">
                     Quick Research
                   </h2>
-                  <p className="text-sm sm:text-base lg:text-lg text-text-secondary font-medium max-w-2xl mx-auto px-4">
+                  <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">
                     Start with curated templates for instant insights
                   </p>
                 </div>
@@ -175,22 +175,22 @@ const Index = () => {
           {isLoading && <LoadingSpinner />}
           
           {error && (
-            <Card className="max-w-md mx-auto p-6 bg-gradient-card shadow-card border border-brand-error/20">
+            <Card className="max-w-md mx-auto p-6 shadow-card border border-destructive/20">
               <div className="text-center">
-                <p className="text-brand-error font-medium">{error}</p>
+                <p className="text-destructive font-medium">{error}</p>
               </div>
             </Card>
           )}
           
           {filteredCompanies.length > 0 && !isLoading && (
             <div className="space-y-6 sm:space-y-8 fade-in">
-              <Card className="p-4 sm:p-6 lg:p-8 bg-gradient-card shadow-premium hover-lift border-0">
+              <Card className="p-6 sm:p-8 lg:p-10 shadow-premium hover-lift">
                 <InvestmentSummary companies={filteredCompanies} />
               </Card>
               
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
                 <div className="lg:col-span-1 order-2 lg:order-1">
-                  <Card className="p-4 sm:p-6 lg:p-7 bg-gradient-card shadow-card hover-lift border-0">
+                  <Card className="p-6 sm:p-8 shadow-card hover-lift">
                     <InvestmentFilters 
                       activeFilters={activeFilters}
                       onFiltersChange={setActiveFilters}
@@ -199,7 +199,7 @@ const Index = () => {
                 </div>
                 
                 <div className="lg:col-span-3 order-1 lg:order-2">
-                  <Card className="bg-gradient-card shadow-premium hover-lift border-0 overflow-hidden">
+                  <Card className="shadow-premium hover-lift overflow-hidden">
                     <CompanyTable 
                       companies={filteredCompanies}
                       onCompanyClick={handleCompanyClick}
@@ -212,11 +212,11 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="border-t border-neutral-200/60 bg-surface/98 backdrop-blur-md mt-16">
+      {/* Modern footer */}
+      <footer className="border-t bg-background/95 backdrop-blur-sm mt-16">
         <div className="container-max section-padding py-8">
           <div className="text-center">
-            <p className="text-sm text-text-secondary font-medium">
+            <p className="text-sm text-muted-foreground font-medium">
               Powered by Toolhouse.ai and Exa.ai
             </p>
           </div>

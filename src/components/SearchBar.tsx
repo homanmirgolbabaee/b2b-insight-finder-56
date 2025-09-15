@@ -65,8 +65,8 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
         <div className="relative" ref={dropdownRef}>
           <form onSubmit={handleSubmit} className="relative">
             <div className="relative group">
-              <div className="relative bg-white rounded-xl border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-200 group-focus-within:border-neutral-400 group-focus-within:shadow-md">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400 group-focus-within:text-neutral-600 h-5 w-5 transition-colors duration-200" />
+              <div className="relative bg-background rounded-xl border border-border shadow-card hover:shadow-card-hover transition-all duration-200 group-focus-within:border-ring group-focus-within:shadow-glow">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground group-focus-within:text-primary h-5 w-5 transition-colors duration-200" />
                 
                 {/* Toolhouse logo in the middle */}
                 <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-15 group-focus-within:opacity-8 transition-opacity duration-200">
@@ -83,12 +83,12 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   disabled={isLoading}
-                  className="pl-12 pr-20 sm:pr-32 h-12 sm:h-14 text-sm sm:text-base bg-white border-0 rounded-xl focus:ring-0 focus:outline-none placeholder:text-neutral-500"
+                  className="pl-12 pr-20 sm:pr-32 h-12 sm:h-14 text-sm sm:text-base bg-background border-0 rounded-xl focus:ring-0 focus:outline-none placeholder:text-muted-foreground"
                 />
                 <Button
                   type="submit"
                   disabled={isLoading || !query.trim()}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 sm:h-10 px-2 sm:px-4 bg-gradient-primary text-white rounded-lg shadow-glow hover:shadow-premium-hover disabled:opacity-50 disabled:cursor-not-allowed transition-premium font-medium text-xs sm:text-sm"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 sm:h-10 px-2 sm:px-4 rounded-lg shadow-card hover:shadow-card-hover disabled:opacity-50 disabled:cursor-not-allowed transition-smooth font-medium text-xs sm:text-sm"
                 >
                   {isLoading ? (
                     <div className="flex items-center gap-1 sm:gap-2">

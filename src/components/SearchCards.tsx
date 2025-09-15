@@ -48,27 +48,27 @@ export function SearchCards({ onCardClick, isLoading }: SearchCardsProps) {
         {searchCards.map((card) => (
           <Card
             key={card.id}
-            className={`group relative p-4 cursor-pointer transition-all duration-200 hover:shadow-md hover:bg-neutral-50 border border-neutral-200 bg-white rounded-lg ${
-              isLoading || card.comingSoon ? 'opacity-50 pointer-events-none' : 'hover:border-neutral-300'
+            className={`group relative p-6 cursor-pointer transition-all duration-200 hover:shadow-card-hover hover:bg-accent border rounded-xl ${
+              isLoading || card.comingSoon ? 'opacity-50 pointer-events-none' : 'hover:border-primary/20'
             }`}
             onClick={() => !isLoading && !card.comingSoon && onCardClick(card.query)}
           >
             <div className="flex items-center gap-4">
-              <div className="flex-shrink-0 p-2 bg-neutral-100 rounded-lg group-hover:bg-brand-primary/10 transition-colors duration-200">
+              <div className="flex-shrink-0 p-3 bg-muted rounded-xl group-hover:bg-primary/10 transition-colors duration-200">
                 {card.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-base font-medium text-neutral-900 truncate">
+                <div className="flex items-center gap-3 mb-2">
+                  <h3 className="text-lg font-semibold text-foreground truncate">
                     {card.name}
                   </h3>
                   {card.comingSoon && (
-                    <span className="text-xs text-neutral-500 bg-neutral-100 px-2 py-1 rounded-md whitespace-nowrap">
+                    <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-md whitespace-nowrap">
                       Coming Soon
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-neutral-600 line-clamp-1">
+                <p className="text-sm text-muted-foreground line-clamp-1">
                   {card.description}
                 </p>
               </div>
