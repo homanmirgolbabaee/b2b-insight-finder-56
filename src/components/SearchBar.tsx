@@ -61,50 +61,35 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
 
   if (heroMode) {
     return (
-      <div className="space-y-8">
-        <div className="relative" ref={dropdownRef}>
-          <form onSubmit={handleSubmit} className="relative">
-            <div className="relative group">
-              <div className="relative bg-background rounded-xl border border-border shadow-card hover:shadow-card-hover transition-all duration-200 group-focus-within:border-ring group-focus-within:shadow-glow">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground group-focus-within:text-primary h-5 w-5 transition-colors duration-200" />
-                
-                {/* Toolhouse logo in the middle */}
-                <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-15 group-focus-within:opacity-8 transition-opacity duration-200">
-                  <img 
-                    src="/toolhouse-logo.png" 
-                    alt="Toolhouse" 
-                    className="h-6 w-auto opacity-60" 
-                  />
+      <div className="space-y-6">
+        <form onSubmit={handleSubmit} className="w-full">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search companies, funding, industries..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              disabled={isLoading}
+              className="h-12 pl-12 pr-32 text-base"
+            />
+            <Button
+              type="submit"
+              disabled={isLoading || !query.trim()}
+              className="absolute right-2 top-1/2 h-8 -translate-y-1/2 px-6"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 animate-spin rounded-full border border-current border-t-transparent" />
+                  <span className="hidden sm:inline">Searching...</span>
                 </div>
-                
-                <Input
-                  type="text"
-                  placeholder="Search companies, founders, industries..."
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  disabled={isLoading}
-                  className="pl-12 pr-20 sm:pr-32 h-12 sm:h-14 text-sm sm:text-base bg-background border-0 rounded-xl focus:ring-0 focus:outline-none placeholder:text-muted-foreground"
-                />
-                <Button
-                  type="submit"
-                  disabled={isLoading || !query.trim()}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 sm:h-10 px-2 sm:px-4 rounded-lg shadow-card hover:shadow-card-hover disabled:opacity-50 disabled:cursor-not-allowed transition-smooth font-medium text-xs sm:text-sm"
-                >
-                  {isLoading ? (
-                    <div className="flex items-center gap-1 sm:gap-2">
-                      <div className="w-3 h-3 border border-neutral-400 border-t-transparent rounded-full animate-spin" />
-                      <span className="hidden sm:inline">Searching...</span>
-                    </div>
-                  ) : (
-                    "Search"
-                  )}
-                </Button>
-              </div>
-            </div>
-          </form>
-        </div>
+              ) : (
+                "Search"
+              )}
+            </Button>
+          </div>
+        </form>
 
-        {/* Filter Bubbles for Hero Mode */}
         <FilterBubbles 
           onFilterSelect={handleFilterSelect}
           selectedFilters={selectedFilters}

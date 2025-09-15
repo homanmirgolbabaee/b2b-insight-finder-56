@@ -173,21 +173,21 @@ export function ExportTools({ companies, searchQuery }: ExportToolsProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="glass"
+          variant="outline"
             size="sm"
             disabled={companies.length === 0}
-            className="font-semibold"
+            className=""
           >
             <Download className="h-4 w-4 mr-2" />
             Export Data
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-52 bg-gradient-glass backdrop-blur-premium border border-neutral-200/60 shadow-premium">
-          <DropdownMenuItem onClick={exportToCSV} className="text-neutral-700 hover:text-neutral-900 hover:bg-neutral-50/80 font-medium">
+        <DropdownMenuContent align="end" className="w-52">
+          <DropdownMenuItem onClick={exportToCSV}>
             <Download className="h-4 w-4 mr-2" />
             Export as CSV
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={exportToJSON} className="text-neutral-700 hover:text-neutral-900 hover:bg-neutral-50/80 font-medium">
+          <DropdownMenuItem onClick={exportToJSON}>
             <Download className="h-4 w-4 mr-2" />
             Export as JSON
           </DropdownMenuItem>
@@ -195,22 +195,22 @@ export function ExportTools({ companies, searchQuery }: ExportToolsProps) {
       </DropdownMenu>
 
       <Button
-        variant="glass"
+        variant="outline"
         size="sm"
         onClick={saveSearch}
         disabled={companies.length === 0 || isSaving}
-        className="font-semibold"
+        className=""
       >
         <BookmarkPlus className="h-4 w-4 mr-2" />
         {isSaving ? "Saving..." : "Save Search"}
       </Button>
 
       <Button
-        variant="glass"
+        variant="outline"
         size="sm"
         onClick={shareResults}
         disabled={companies.length === 0}
-        className="font-semibold"
+        className=""
       >
         <Share2 className="h-4 w-4 mr-2" />
         Share Results

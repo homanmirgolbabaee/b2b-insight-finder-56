@@ -73,97 +73,93 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-hero">
-      {/* Modern header with enhanced styling */}
-      <header className="border-b bg-background/95 backdrop-blur-sm sticky top-0 z-50 shadow-card">
-        <div className="container-max section-padding py-4 sm:py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+    <div className="min-h-screen bg-background">
+      {/* Modern header */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 max-w-screen-2xl items-center">
+          <div className="mr-4 hidden md:flex">
+            <div className="flex items-center gap-3">
               <img 
                 src="/toolhouse-logo.png" 
                 alt="Toolhouse" 
-                className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0" 
+                className="h-8 w-8" 
               />
-              <div className="min-w-0">
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground tracking-tight truncate">Toolhouse.ai</h1>
-                <p className="text-xs sm:text-sm text-muted-foreground font-medium hidden sm:block">AI-powered startup intelligence</p>
+              <div>
+                <h1 className="text-lg font-semibold">Toolhouse.ai</h1>
+                <p className="text-xs text-muted-foreground">AI-powered startup intelligence</p>
               </div>
             </div>
-            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+          </div>
+          <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+            <div className="w-full flex-1 md:w-auto md:flex-none">
               <N8nIntegrationButton />
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main search interface */}
-      <div className="container-max section-padding py-8 sm:py-12 lg:py-16">
-        <div className="space-y-6 sm:space-y-8 lg:space-y-10">
-          {/* Modern search mode selector */}
-          <div className="flex justify-center fade-in">
-            <div className="bg-card/90 backdrop-blur-sm rounded-xl p-1 sm:p-1.5 shadow-premium border">
-              <div className="flex gap-1">
-                <button
-                  onClick={() => setShowCardMode(false)}
-                  className={`px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${
-                    !showCardMode 
-                      ? 'bg-primary text-primary-foreground shadow-card' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                  }`}
-                >
-                  Custom Search
-                </button>
-                <button
-                  onClick={() => setShowCardMode(true)}
-                  className={`px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${
-                    showCardMode 
-                      ? 'bg-primary text-primary-foreground shadow-card' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                  }`}
-                >
-                  Quick Research
-                </button>
-              </div>
+      {/* Main content */}
+      <div className="container max-w-screen-2xl py-8 lg:py-16">
+        <div className="space-y-8 lg:space-y-12">
+          {/* Mode toggle */}
+          <div className="flex justify-center">
+            <div className="inline-flex items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground">
+              <button
+                onClick={() => setShowCardMode(false)}
+                className={`inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${
+                  !showCardMode 
+                    ? 'bg-background text-foreground shadow-sm' 
+                    : 'hover:bg-background/60 hover:text-foreground'
+                }`}
+              >
+                Custom Search
+              </button>
+              <button
+                onClick={() => setShowCardMode(true)}
+                className={`inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${
+                  showCardMode 
+                    ? 'bg-background text-foreground shadow-sm' 
+                    : 'hover:bg-background/60 hover:text-foreground'
+                }`}
+              >
+                Quick Research
+              </button>
             </div>
           </div>
 
-          {/* Modern search interface */}
+          {/* Search interface */}
           {!showCardMode ? (
-            <Card className="max-w-4xl mx-auto p-8 sm:p-10 lg:p-12 shadow-premium hover-lift">
-              <div className="space-y-8 sm:space-y-10">
-                <div className="text-center space-y-4 sm:space-y-6">
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight">
-                    Discover Startups with AI
-                  </h2>
-                  <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-                    Find companies, analyze funding, and explore markets with intelligent search
-                  </p>
-                </div>
-                
-                <SearchBar 
-                  onSearch={handleSearch} 
-                  isLoading={isLoading}
-                  showCardMode={false}
-                  onToggleMode={() => {}}
-                  heroMode={true}
-                />
+            <div className="mx-auto max-w-4xl space-y-8">
+              <div className="text-center space-y-4">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+                  Discover Startups with AI
+                </h1>
+                <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
+                  Find companies, analyze funding, and explore markets with intelligent search
+                </p>
               </div>
-            </Card>
+              
+              <SearchBar 
+                onSearch={handleSearch} 
+                isLoading={isLoading}
+                showCardMode={false}
+                onToggleMode={() => {}}
+                heroMode={true}
+              />
+            </div>
           ) : (
-            <Card className="max-w-6xl mx-auto p-8 sm:p-10 lg:p-12 shadow-premium hover-lift">
-              <div className="space-y-8 sm:space-y-10">
-                <div className="text-center space-y-4 sm:space-y-6">
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight">
-                    Quick Research
-                  </h2>
-                  <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-                    Start with curated templates for instant insights
-                  </p>
-                </div>
-                
-                <SearchCards onCardClick={handleCardClick} isLoading={isLoading} />
+            <div className="mx-auto max-w-6xl space-y-8">
+              <div className="text-center space-y-4">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+                  Quick Research
+                </h1>
+                <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
+                  Start with curated templates for instant insights
+                </p>
               </div>
-            </Card>
+              
+              <SearchCards onCardClick={handleCardClick} isLoading={isLoading} />
+            </div>
           )}
 
           {/* Example Queries Section */}
@@ -171,26 +167,26 @@ const Index = () => {
             <ExampleQueries onQuerySelect={handleSearch} />
           )}
 
-          {/* Professional results section */}
+          {/* Results section */}
           {isLoading && <LoadingSpinner />}
           
           {error && (
-            <Card className="max-w-md mx-auto p-6 shadow-card border border-destructive/20">
-              <div className="text-center">
-                <p className="text-destructive font-medium">{error}</p>
+            <div className="mx-auto max-w-md">
+              <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-center">
+                <p className="text-sm text-destructive">{error}</p>
               </div>
-            </Card>
+            </div>
           )}
           
           {filteredCompanies.length > 0 && !isLoading && (
-            <div className="space-y-6 sm:space-y-8 fade-in">
-              <Card className="p-6 sm:p-8 lg:p-10 shadow-premium hover-lift">
+            <div className="space-y-8">
+              <Card className="p-6">
                 <InvestmentSummary companies={filteredCompanies} />
               </Card>
               
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
-                <div className="lg:col-span-1 order-2 lg:order-1">
-                  <Card className="p-6 sm:p-8 shadow-card hover-lift">
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+                <div className="order-2 lg:order-1">
+                  <Card className="p-6">
                     <InvestmentFilters 
                       activeFilters={activeFilters}
                       onFiltersChange={setActiveFilters}
@@ -198,8 +194,8 @@ const Index = () => {
                   </Card>
                 </div>
                 
-                <div className="lg:col-span-3 order-1 lg:order-2">
-                  <Card className="shadow-premium hover-lift overflow-hidden">
+                <div className="order-1 lg:order-2 lg:col-span-3">
+                  <Card className="overflow-hidden">
                     <CompanyTable 
                       companies={filteredCompanies}
                       onCompanyClick={handleCompanyClick}
@@ -212,14 +208,12 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Modern footer */}
-      <footer className="border-t bg-background/95 backdrop-blur-sm mt-16">
-        <div className="container-max section-padding py-8">
-          <div className="text-center">
-            <p className="text-sm text-muted-foreground font-medium">
-              Powered by Toolhouse.ai and Exa.ai
-            </p>
-          </div>
+      {/* Footer */}
+      <footer className="border-t py-6 md:py-0">
+        <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+            Powered by Toolhouse.ai and Exa.ai
+          </p>
         </div>
       </footer>
       
