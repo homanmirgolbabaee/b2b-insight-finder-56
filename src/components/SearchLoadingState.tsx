@@ -17,35 +17,35 @@ const searchStages: SearchStage[] = [
     label: "Calling Toolhouse Agent",
     description: "Initializing AI-powered search infrastructure",
     icon: <Cpu className="h-4 w-4" />,
-    duration: 1200
+    duration: 2000
   },
   {
     id: "exa",
     label: "Using Exa MCP Servers",
     description: "Accessing specialized data sources and APIs",
     icon: <Activity className="h-4 w-4" />,
-    duration: 1800
+    duration: 3000
   },
   {
     id: "web",
     label: "Searching the Web",
     description: "Crawling latest startup data and funding news",
     icon: <Globe className="h-4 w-4" />,
-    duration: 2200
+    duration: 4000
   },
   {
     id: "crawling",
     label: "Crawling Sources",
     description: "Processing structured and unstructured data",
     icon: <SearchIcon className="h-4 w-4" />,
-    duration: 1600
+    duration: 8000
   },
   {
     id: "drafting",
     label: "Drafting Response",
     description: "Analyzing and formatting results",
     icon: <CheckCircle className="h-4 w-4" />,
-    duration: 1400
+    duration: 2000
   }
 ];
 
@@ -61,51 +61,56 @@ export function SearchLoadingState({ searchQuery, isLoading }: SearchLoadingStat
 
   useEffect(() => {
     if (!isLoading) {
-      // Reset everything when not loading
       setCurrentStageIndex(0);
       setProgress(0);
       setCompletedStages(new Set());
       return;
     }
 
-    // Start from the beginning when loading starts
-    setCurrentStageIndex(0);
-    setProgress(0);
-    setCompletedStages(new Set());
-
-    let startTime = Date.now();
+    let currentProgress = 0;
     let stageIndex = 0;
-    let cumulativeTime = 0;
-
-    const progressTimer = setInterval(() => {
+    let stageStartTime = Date.now();
+    
+    const updateProgress = () => {
       if (!isLoading) return;
       
-      const elapsed = Date.now() - startTime;
+      const currentStage = searchStages[stageIndex];
+      if (!currentStage) return;
+      
+      const elapsed = Date.now() - stageStartTime;
+      const stageProgress = Math.min((elapsed / currentStage.duration) * 100, 100);
+      
+      // Calculate total progress across all stages
       const totalDuration = searchStages.reduce((sum, stage) => sum + stage.duration, 0);
-      const newProgress = Math.min((elapsed / totalDuration) * 100, 100);
-      setProgress(newProgress);
-
-      // Update stage based on elapsed time
-      let newCumulativeTime = 0;
-      for (let i = 0; i < searchStages.length; i++) {
-        newCumulativeTime += searchStages[i].duration;
-        if (elapsed >= newCumulativeTime && i > stageIndex) {
-          setCompletedStages(prev => {
-            const newSet = new Set(prev);
-            for (let j = 0; j <= i - 1; j++) {
-              newSet.add(searchStages[j].id);
+      const completedDuration = searchStages.slice(0, stageIndex).reduce((sum, stage) => sum + stage.duration, 0);
+      const overallProgress = Math.min(((completedDuration + (elapsed)) / totalDuration) * 100, 100);
+      
+      setProgress(overallProgress);
+      setCurrentStageIndex(stageIndex);
+      
+      // Check if current stage is complete
+      if (elapsed >= currentStage.duration && stageIndex < searchStages.length - 1) {
+        setCompletedStages(prev => new Set([...prev, currentStage.id]));
+        stageIndex++;
+        stageStartTime = Date.now();
+        
+        // Add a smooth transition delay for the final stage
+        if (stageIndex === searchStages.length - 1) {
+          setTimeout(() => {
+            if (isLoading) {
+              setCurrentStageIndex(stageIndex);
             }
-            return newSet;
-          });
-          stageIndex = i;
-          setCurrentStageIndex(i);
+          }, 500);
         }
+      } else if (stageIndex === searchStages.length - 1 && elapsed >= currentStage.duration) {
+        setCompletedStages(prev => new Set([...prev, currentStage.id]));
+        setProgress(100);
       }
-    }, 100);
-
-    return () => {
-      clearInterval(progressTimer);
     };
+
+    const interval = setInterval(updateProgress, 100);
+    
+    return () => clearInterval(interval);
   }, [isLoading]);
 
   const currentStage = searchStages[currentStageIndex];
@@ -118,7 +123,7 @@ export function SearchLoadingState({ searchQuery, isLoading }: SearchLoadingStat
           <div className="flex items-center gap-3">
             <SearchIcon className="h-4 w-4 text-muted-foreground" />
             <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Query</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Search Query</p>
               <p className="text-sm font-medium text-foreground">{searchQuery}</p>
             </div>
           </div>
