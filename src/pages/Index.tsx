@@ -189,7 +189,7 @@ const Index = () => {
               
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
                 <div className="order-2 lg:order-1">
-                  <Card className="p-6 sticky top-24">
+                  <Card className="p-6">
                     <InvestmentFilters 
                       activeFilters={activeFilters}
                       onFiltersChange={setActiveFilters}
@@ -198,20 +198,10 @@ const Index = () => {
                 </div>
                 
                 <div className="order-1 lg:order-2 lg:col-span-3">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-lg font-semibold text-foreground">
-                        Search Results
-                      </h2>
-                      <div className="text-sm text-muted-foreground">
-                        {filteredCompanies.length} companies
-                      </div>
-                    </div>
-                    <CompanyList 
-                      companies={filteredCompanies}
-                      onCompanyClick={handleCompanyClick}
-                    />
-                  </div>
+                  <CompanyList 
+                    companies={filteredCompanies}
+                    onCompanyClick={handleCompanyClick}
+                  />
                 </div>
               </div>
             </div>
@@ -221,8 +211,8 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="border-t py-6 md:py-0">
-        <div className="container flex flex-col items-center justify-center gap-4 md:h-24">
-          <p className="text-center text-sm leading-loose text-muted-foreground">
+        <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
             Powered by Toolhouse.ai and Exa.ai
           </p>
         </div>
