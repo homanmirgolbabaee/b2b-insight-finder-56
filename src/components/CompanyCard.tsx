@@ -1,7 +1,7 @@
 import { ExternalLink, Linkedin, Globe, Newspaper, Heart } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { dashboardStore } from "@/stores/dashboardStore";
+
 
 interface Company {
   name: string;
@@ -107,28 +107,12 @@ export function CompanyCard({ company, onClick }: CompanyCardProps) {
         
         <div className="flex flex-wrap gap-3 pt-4">
           <Button
-            variant={dashboardStore.isCompanySaved(company.name) ? "default" : "outline"}
+            variant="outline"
             size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (dashboardStore.isCompanySaved(company.name)) {
-                dashboardStore.unsaveCompany(company.name);
-              } else {
-                dashboardStore.saveCompany(
-                  company.name, 
-                  company.funding_stage || "Not disclosed", 
-                  company.funding_amount || "Not disclosed"
-                );
-              }
-            }}
-            className={`flex items-center gap-2 font-medium transition-premium ${
-              dashboardStore.isCompanySaved(company.name)
-                ? "bg-brand-primary text-white border-brand-primary hover:bg-brand-primary/90"
-                : "text-neutral-600 hover:text-brand-primary hover:border-brand-primary hover:bg-brand-primary/5"
-            }`}
+            className="flex items-center gap-2 text-neutral-600 hover:text-brand-primary hover:border-brand-primary hover:bg-brand-primary/5 transition-premium font-medium"
           >
-            <Heart className={`h-4 w-4 ${dashboardStore.isCompanySaved(company.name) ? "fill-current" : ""}`} />
-            {dashboardStore.isCompanySaved(company.name) ? "Saved" : "Save"}
+            <Heart className="h-4 w-4" />
+            Save
           </Button>
           
           <Button

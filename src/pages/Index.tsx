@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, User, LogOut, Building2, TrendingUp, Target } from "lucide-react";
+import { Search, Building2, TrendingUp, Target } from "lucide-react";
 import { InvestmentSummary } from "@/components/InvestmentSummary";
 import { SearchBar } from "@/components/SearchBar";
 import { SearchCards } from "@/components/SearchCards";
@@ -8,7 +8,6 @@ import { CompanyTable } from "@/components/CompanyTable";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CompanyDetailPanel } from "@/components/CompanyDetailPanel";
 import { InvestmentFilters } from "@/components/InvestmentFilters";
-import { UserDashboard } from "@/components/UserDashboard";
 import { N8nIntegrationButton } from "@/components/N8nIntegrationButton";
 import { useCompanySearch } from "@/hooks/useCompanySearch";
 import { Button } from "@/components/ui/button";
@@ -52,7 +51,6 @@ const Index = () => {
     locations: []
   });
   const [searchQuery, setSearchQuery] = useState("");
-  const [showDashboard, setShowDashboard] = useState(false);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -70,14 +68,9 @@ const Index = () => {
 
   const filteredCompanies = companies; // TODO: Implement actual filtering based on activeFilters
 
-  // Get similar companies for detail panel (simple implementation)
   const getSimilarCompanies = (company: Company) => {
     return companies.filter(c => c.name !== company.name).slice(0, 3);
   };
-
-  if (showDashboard) {
-    return <UserDashboard onClose={() => setShowDashboard(false)} />;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-hero">
@@ -98,23 +91,6 @@ const Index = () => {
             </div>
             <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
               <N8nIntegrationButton />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowDashboard(true)}
-                className="text-text-secondary hover:text-text-primary hover:bg-neutral-100/80 font-medium text-xs sm:text-sm px-2 sm:px-3"
-              >
-                <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Dashboard</span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-text-secondary hover:text-text-primary hover:bg-neutral-100/80 font-medium text-xs sm:text-sm px-2 sm:px-3"
-              >
-                <LogOut className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Sign Out</span>
-              </Button>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDown, ChevronRight, ExternalLink, Linkedin, Globe, Newspaper, ArrowUpDown, ChevronUp, Star, Target, TrendingUp, Heart, FileText } from "lucide-react";
-import { dashboardStore } from "@/stores/dashboardStore";
+
 import { ReportDialog } from "@/components/ReportDialog";
 import {
   Table,
@@ -254,28 +254,12 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
               {/* Actions */}
               <div className="flex flex-wrap items-center gap-2 pt-2">
                 <Button
-                  variant={dashboardStore.isCompanySaved(company.name) ? "default" : "outline"}
+                  variant="outline"
                   size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (dashboardStore.isCompanySaved(company.name)) {
-                      dashboardStore.unsaveCompany(company.name);
-                    } else {
-                      dashboardStore.saveCompany(
-                        company.name, 
-                        company.funding_stage || "Not disclosed", 
-                        company.funding_amount || "Not disclosed"
-                      );
-                    }
-                  }}
-                  className={`h-8 px-3 text-xs font-medium transition-all ${
-                    dashboardStore.isCompanySaved(company.name)
-                      ? "bg-brand-primary text-white border-brand-primary hover:bg-brand-primary/90"
-                      : "bg-white border-neutral-300 hover:bg-brand-primary hover:text-white hover:border-brand-primary"
-                  }`}
+                  className="h-8 px-3 text-xs font-medium transition-all bg-white border-neutral-300 hover:bg-brand-primary hover:text-white hover:border-brand-primary"
                 >
-                  <Heart className={`h-3 w-3 mr-1 ${dashboardStore.isCompanySaved(company.name) ? "fill-current" : ""}`} />
-                  {dashboardStore.isCompanySaved(company.name) ? "Saved" : "Save"}
+                  <Heart className="h-3 w-3 mr-1" />
+                  Save
                 </Button>
                 <Button
                   variant="ghost"
@@ -573,28 +557,12 @@ export function CompanyTable({ companies, onCompanyClick }: CompanyTableProps) {
                     <TableCell className="py-5">
                       <div className="flex items-center gap-1">
                         <Button
-                          variant={dashboardStore.isCompanySaved(company.name) ? "default" : "outline"}
+                          variant="outline"
                           size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (dashboardStore.isCompanySaved(company.name)) {
-                              dashboardStore.unsaveCompany(company.name);
-                            } else {
-                              dashboardStore.saveCompany(
-                                company.name, 
-                                company.funding_stage || "Not disclosed", 
-                                company.funding_amount || "Not disclosed"
-                              );
-                            }
-                          }}
-                          className={`h-7 px-2 text-xs font-medium transition-all ${
-                            dashboardStore.isCompanySaved(company.name)
-                              ? "bg-brand-primary text-white border-brand-primary hover:bg-brand-primary/90"
-                              : "bg-white border-neutral-300 hover:bg-brand-primary hover:text-white hover:border-brand-primary"
-                          }`}
+                          className="h-7 px-2 text-xs font-medium transition-all bg-white border-neutral-300 hover:bg-brand-primary hover:text-white hover:border-brand-primary"
                         >
-                          <Heart className={`h-3 w-3 mr-1 ${dashboardStore.isCompanySaved(company.name) ? "fill-current" : ""}`} />
-                          {dashboardStore.isCompanySaved(company.name) ? "Saved" : "Save"}
+                          <Heart className="h-3 w-3 mr-1" />
+                          Save
                         </Button>
                         <Button
                           variant="ghost"
