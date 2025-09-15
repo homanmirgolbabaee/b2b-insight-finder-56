@@ -73,7 +73,7 @@ export function InvestmentSummary({ companies }: InvestmentSummaryProps) {
   const { total, average, validCount } = calculateTotalFunding();
 
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-6 bg-gradient-to-r from-neutral-50 to-white border border-neutral-200 rounded-xl shadow-card">
+    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-6 bg-gradient-to-r from-neutral-50 to-white border border-neutral-100 rounded-xl shadow-sm">
       <div className="flex flex-col sm:flex-row sm:items-center gap-6">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-brand-primary/10 rounded-lg">

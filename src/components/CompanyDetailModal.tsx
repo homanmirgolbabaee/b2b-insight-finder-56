@@ -65,7 +65,7 @@ export function CompanyDetailModal({ company, isOpen, onClose, similarCompanies 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden p-0">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden p-0 border-0 shadow-2xl">
         <div className="flex flex-col h-full">
           {/* Header */}
           <DialogHeader className="p-6 pb-4 border-b border-border">
@@ -120,14 +120,6 @@ export function CompanyDetailModal({ company, isOpen, onClose, similarCompanies 
                 </div>
               </div>
               
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onClose}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                <X className="h-4 w-4" />
-              </Button>
             </div>
           </DialogHeader>
 
