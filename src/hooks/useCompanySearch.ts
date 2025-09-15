@@ -129,11 +129,13 @@ export function useCompanySearch() {
       console.error('Stream processing error:', err);
       setError('Error processing search results');
     } finally {
+      console.log('API call completed, setting isLoading to false');
       setIsLoading(false);
     }
   }, []);
 
   const search = useCallback(async (query: string) => {
+    console.log('Starting search for query:', query);
     setIsLoading(true);
     setError(null);
     
@@ -187,10 +189,13 @@ export function useCompanySearch() {
       // Clear previous results for new searches
       setCompanies([]);
 
+      console.log('Starting to read stream...');
       const reader = response.body.getReader();
       readerRef.current = reader;
       
+      console.log('Stream processing started');
       await processStream(reader);
+      console.log('Stream processing completed');
       
     } catch (err) {
       console.error('Search error:', err);

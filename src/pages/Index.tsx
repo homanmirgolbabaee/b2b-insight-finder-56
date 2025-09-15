@@ -4,9 +4,9 @@ import { InvestmentSummary } from "@/components/InvestmentSummary";
 import { SearchBar } from "@/components/SearchBar";
 import { SearchCards } from "@/components/SearchCards";
 import { ExampleQueries } from "@/components/ExampleQueries";
-import { CompanyTable } from "@/components/CompanyTable";
+import { CompanyList } from "@/components/CompanyList";
 import { SearchLoadingState } from "@/components/SearchLoadingState";
-import { CompanyDetailPanel } from "@/components/CompanyDetailPanel";
+import { CompanyDetailModal } from "@/components/CompanyDetailModal";
 import { InvestmentFilters } from "@/components/InvestmentFilters";
 import { N8nIntegrationButton } from "@/components/N8nIntegrationButton";
 import { useCompanySearch } from "@/hooks/useCompanySearch";
@@ -26,6 +26,7 @@ interface Company {
   location: string;
   last_updated: string;
   investors: string[];
+  logo: string;
   links: {
     news?: string | null;
     linkedin: string;
@@ -44,6 +45,7 @@ const Index = () => {
   const { companies, isLoading, error, search } = useCompanySearch();
   const [showCardMode, setShowCardMode] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
     fundingStages: [],
     fundingRanges: [],
@@ -64,6 +66,7 @@ const Index = () => {
 
   const handleCompanyClick = (company: Company) => {
     setSelectedCompany(company);
+    setIsModalOpen(true);
   };
 
   const filteredCompanies = companies; // TODO: Implement actual filtering based on activeFilters
@@ -168,7 +171,7 @@ const Index = () => {
           )}
 
           {/* Results section */}
-          {isLoading && <SearchLoadingState searchQuery={searchQuery} />}
+          {isLoading && <SearchLoadingState searchQuery={searchQuery} isLoading={isLoading} />}
           
           {error && (
             <div className="mx-auto max-w-md">
@@ -186,7 +189,7 @@ const Index = () => {
               
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
                 <div className="order-2 lg:order-1">
-                  <Card className="p-6">
+                  <Card className="p-6 sticky top-24">
                     <InvestmentFilters 
                       activeFilters={activeFilters}
                       onFiltersChange={setActiveFilters}
@@ -195,12 +198,20 @@ const Index = () => {
                 </div>
                 
                 <div className="order-1 lg:order-2 lg:col-span-3">
-                  <Card className="overflow-hidden">
-                    <CompanyTable 
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-lg font-semibold text-foreground">
+                        Search Results
+                      </h2>
+                      <div className="text-sm text-muted-foreground">
+                        {filteredCompanies.length} companies
+                      </div>
+                    </div>
+                    <CompanyList 
                       companies={filteredCompanies}
                       onCompanyClick={handleCompanyClick}
                     />
-                  </Card>
+                  </div>
                 </div>
               </div>
             </div>
@@ -210,21 +221,23 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="border-t py-6 md:py-0">
-        <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
-          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+        <div className="container flex flex-col items-center justify-center gap-4 md:h-24">
+          <p className="text-center text-sm leading-loose text-muted-foreground">
             Powered by Toolhouse.ai and Exa.ai
           </p>
         </div>
       </footer>
       
-      {/* Company Detail Panel */}
-      {selectedCompany && (
-        <CompanyDetailPanel
-          company={selectedCompany}
-          onClose={() => setSelectedCompany(null)}
-          similarCompanies={getSimilarCompanies(selectedCompany)}
-        />
-      )}
+      {/* Company Detail Modal */}
+      <CompanyDetailModal
+        company={selectedCompany}
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedCompany(null);
+        }}
+        similarCompanies={selectedCompany ? getSimilarCompanies(selectedCompany) : []}
+      />
     </div>
   );
 };
