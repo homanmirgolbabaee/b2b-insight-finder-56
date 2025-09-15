@@ -42,7 +42,7 @@ interface ActiveFilters {
 }
 
 const Index = () => {
-  const { companies, isLoading, error, search } = useCompanySearch();
+  const { companies, isLoading, error, searchDuration, search } = useCompanySearch();
   const [showCardMode, setShowCardMode] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -174,9 +174,30 @@ const Index = () => {
           {isLoading && <SearchLoadingState searchQuery={searchQuery} isLoading={isLoading} />}
           
           {error && (
-            <div className="mx-auto max-w-md">
-              <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-center">
-                <p className="text-sm text-destructive">{error}</p>
+            <div className="mx-auto max-w-2xl">
+              <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-6 text-center space-y-3">
+                <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-destructive/20">
+                  <svg className="w-6 h-6 text-destructive" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.314 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-destructive mb-2">Search Issue</h3>
+                  <p className="text-sm text-destructive/80 leading-relaxed">{error}</p>
+                  {searchDuration > 0 && (
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Search duration: {Math.round(searchDuration / 1000)}s
+                    </p>
+                  )}
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => window.location.reload()}
+                  className="border-destructive/30 text-destructive hover:bg-destructive/10"
+                >
+                  Try Again
+                </Button>
               </div>
             </div>
           )}

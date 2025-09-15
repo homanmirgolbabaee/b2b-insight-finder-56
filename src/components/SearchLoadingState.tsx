@@ -58,14 +58,18 @@ export function SearchLoadingState({ searchQuery, isLoading }: SearchLoadingStat
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [completedStages, setCompletedStages] = useState<Set<string>>(new Set());
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
     if (!isLoading) {
       setCurrentStageIndex(0);
       setProgress(0);
       setCompletedStages(new Set());
+      setElapsedTime(0);
       return;
     }
+
+    const startTime = Date.now();
 
     let currentProgress = 0;
     let stageIndex = 0;
@@ -73,6 +77,9 @@ export function SearchLoadingState({ searchQuery, isLoading }: SearchLoadingStat
     
     const updateProgress = () => {
       if (!isLoading) return;
+      
+      // Update elapsed time
+      setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
       
       const currentStage = searchStages[stageIndex];
       if (!currentStage) return;
@@ -136,9 +143,15 @@ export function SearchLoadingState({ searchQuery, isLoading }: SearchLoadingStat
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Processing</h3>
             <span className="text-xs text-muted-foreground font-mono">
-              {Math.round(progress)}%
+              {Math.round(progress)}% • {elapsedTime}s
             </span>
           </div>
+          
+          {elapsedTime > 45 && (
+            <div className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-md p-2 mb-2">
+              Complex searches may take up to 2 minutes. Please wait...
+            </div>
+          )}
           
           <Progress value={progress} className="h-1" />
         </div>

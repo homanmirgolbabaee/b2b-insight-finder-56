@@ -30,8 +30,10 @@ export function useCompanySearch() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchDuration, setSearchDuration] = useState(0);
   const runIdRef = useRef<string | null>(null);
   const readerRef = useRef<ReadableStreamDefaultReader<Uint8Array> | null>(null);
+  const searchStartTimeRef = useRef<number>(0);
 
   const processStream = useCallback(async (reader: ReadableStreamDefaultReader<Uint8Array>) => {
     const decoder = new TextDecoder();
@@ -127,13 +129,23 @@ export function useCompanySearch() {
       }
     } catch (err) {
       console.error('Stream processing error:', err);
-      setError('Error processing search results');
+      const duration = Date.now() - searchStartTimeRef.current;
+      if (duration > 60000) { // More than 1 minute
+        setError('Search is taking longer than expected. This happens with complex queries. Please try a more specific search or try again later.');
+      } else if (err instanceof Error && err.name === 'AbortError') {
+        setError('Search was cancelled. Please try again.');
+      } else {
+        setError('Error processing search results. Please try again with a different query.');
+      }
     } finally {
       setIsLoading(false);
+      setSearchDuration(Date.now() - searchStartTimeRef.current);
     }
   }, []);
 
   const search = useCallback(async (query: string) => {
+    searchStartTimeRef.current = Date.now();
+    setSearchDuration(0);
     setIsLoading(true);
     setError(null);
     
@@ -150,6 +162,12 @@ export function useCompanySearch() {
     try {
       let response: Response;
       
+      // Create an AbortController with a longer timeout for complex searches
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+      }, 120000); // 2 minutes timeout
+      
       if (runIdRef.current) {
         // Subsequent search - use PUT with runId
         response = await fetch(`https://agents.toolhouse.ai/bf988a4a-2555-4acd-81d2-3649925e08aa/${runIdRef.current}`, {
@@ -158,6 +176,7 @@ export function useCompanySearch() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ message: query }),
+          signal: controller.signal,
         });
       } else {
         // First search - use POST
@@ -167,6 +186,7 @@ export function useCompanySearch() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ message: query }),
+          signal: controller.signal,
         });
         
         // Save the run ID from the response header
@@ -175,6 +195,12 @@ export function useCompanySearch() {
           runIdRef.current = runId;
         }
       }
+
+      // Clear the timeout since we got a response
+      clearTimeout(timeoutId);
+
+      // Clear the timeout since we got a response
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -194,8 +220,23 @@ export function useCompanySearch() {
       
     } catch (err) {
       console.error('Search error:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred during search');
+      const duration = Date.now() - searchStartTimeRef.current;
+      
+      if (err instanceof Error) {
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          setError('Network connection issue. Please check your internet connection and try again.');
+        } else if (err.message.includes('timeout')) {
+          setError('Search timed out. Please try a more specific query or try again later.');
+        } else if (duration > 30000) { // More than 30 seconds
+          setError('Search is taking longer than expected. Complex queries may take a few minutes to complete.');
+        } else {
+          setError(`Search failed: ${err.message}`);
+        }
+      } else {
+        setError('An unexpected error occurred during search. Please try again.');
+      }
       setIsLoading(false);
+      setSearchDuration(duration);
     }
   }, [processStream]);
 
@@ -203,6 +244,7 @@ export function useCompanySearch() {
     companies,
     isLoading,
     error,
+    searchDuration,
     search,
   };
 }
