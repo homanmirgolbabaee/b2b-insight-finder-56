@@ -81,7 +81,7 @@ export function SearchBar({ onSearch, isLoading, showCardMode, onToggleMode, her
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <div className="h-3 w-3 animate-spin rounded-full border border-current border-t-transparent" />
-                  <span className="hidden sm:inline">AI Searching...</span>
+                  <span className="hidden sm:inline">Searching...</span>
                 </div>
               ) : (
                 "Search"

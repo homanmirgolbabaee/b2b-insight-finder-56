@@ -5,7 +5,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { SearchCards } from "@/components/SearchCards";
 import { ExampleQueries } from "@/components/ExampleQueries";
 import { CompanyTable } from "@/components/CompanyTable";
-import { SearchLoadingState } from "@/components/SearchLoadingState";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CompanyDetailPanel } from "@/components/CompanyDetailPanel";
 import { InvestmentFilters } from "@/components/InvestmentFilters";
 import { N8nIntegrationButton } from "@/components/N8nIntegrationButton";
@@ -168,7 +168,7 @@ const Index = () => {
           )}
 
           {/* Results section */}
-          {isLoading && <SearchLoadingState searchQuery={searchQuery} />}
+          {isLoading && <LoadingSpinner />}
           
           {error && (
             <div className="mx-auto max-w-md">
